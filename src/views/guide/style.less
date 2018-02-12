@@ -1,0 +1,62 @@
+@import '../../assets/style/mixins';
+
+@shadowColor: #0000001c;
+@bgColor: #3f51b5;
+@sectionColor_1: #00bbd6;
+@sectionColor_2: #acec00;
+@sectionColor_3: #46b6ac;
+
+.guide {
+  position: relative;
+  padding-top: 60px;
+  height: inherit;
+
+  .layout-article {
+    height: calc(~"100vh - 60px");
+    overflow: auto;
+  }
+}
+
+/* .guide-header {
+  position: absolute;
+  width: 100%;
+  height: 60px;
+  top: 0;
+  left: 0;
+  line-height: 55px;
+  color: #ffffff;
+  box-shadow: 1px 2px @shadowColor;
+  background: @bgColor;
+  .border-box();
+  .clearfix();
+  .el-button--iconButton:hover {
+    background: #0000001c;
+  }
+
+  .el-button--iconButton, .el-dropdown {
+    color: inherit;
+  }
+  .layout-header-btns {
+    float: right;
+  }
+} */
+
+// .guide-article {
+//   height: calc(~"100vh - 60px");
+//   overflow: auto;
+// }
+.guide-section {
+  width: 100%;
+  height: 550px;
+  color: #fff;
+
+  &.section-floor-1 {
+    background-color: @sectionColor_1;
+  }
+  &.section-floor-2 {
+    background-color: @sectionColor_2;
+  }
+  &.section-floor-3 {
+    background-color: @sectionColor_3;
+  }
+}

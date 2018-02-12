@@ -1,0 +1,102 @@
+@charset "UTF-8";
+@import "./common/var.css";
+
+@component-namespace el {
+  @b scrollbar {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    
+    &:hover,
+    &:active,
+    &:focus {
+      .el-scrollbar__bar {
+        visibility: visible;
+        transition: visibility 340ms ease-out;
+      }
+    }
+
+    @e wrap {
+      overflow: scroll;
+
+      @m hidden-default {
+        &::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+        }
+      }
+    }
+
+    @e view {
+      display: inline-block;
+      width: 100%;
+    }
+
+    @e thumb {
+      position: relative;
+      display: block;
+      size: 0;
+      cursor: pointer;
+      border-radius: inherit;
+      background-color: var(--scrollbar-background-color);
+      transition: .3s background-color;
+
+      &:hover {
+        background-color: var(--scrollbar-hover-background-color);
+      }
+      &:active {
+         background-color: var(--scrollbar-active-background-color);
+      }
+    }
+
+    @e bar {
+      position: absolute;
+      right: 4px;
+      bottom: 2px;
+      z-index: 1001;
+      border-radius: 4px;
+      visibility: hidden;
+      transition: visibility 120ms ease-out;
+
+      @when alwaysShow {
+        visibility: visible;
+      }
+
+      @when vertical {
+        width: 8px;
+        top: 2px;
+
+        > div {
+          width: 100%;
+        }
+      }
+
+      @when horizontal {
+        height: 8px;
+        left: 2px;
+
+        > div {
+          height: 100%;
+        }
+      }
+
+      @when vertical.is-small {
+        width: 4px;
+        top: 2px;
+
+        > div {
+          width: 100%;
+        }
+      }
+
+      @when horizontal.is-small {
+        height: 4px;
+        left: 2px;
+
+        > div {
+          height: 100%;
+        }
+      }
+    }
+  }
+}

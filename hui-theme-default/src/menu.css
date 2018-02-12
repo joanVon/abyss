@@ -1,0 +1,458 @@
+@charset "UTF-8";
+@import "./common/var.css";
+
+@define-extend menu-item {
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  color: var(--menu-item-color);
+  padding: 0 12px 0 10px;
+  cursor: pointer;
+  position: relative;
+  transition: all .3s;
+  box-sizing: border-box;
+  white-space: nowrap;
+  border-left: 2px solid transparent;
+}
+
+@component-namespace el {
+  /* 菜单 */
+  @b menu {
+    /*border-radius: 2px;*/
+    list-style: none;
+    position: relative;
+    margin: 0;
+    padding-left: 0;
+    background-color: var(--menu-item-fill);
+    @utils-clearfix;
+
+    & li {
+      list-style: none;
+    }
+
+    /* 主题色为：dark */
+    @m dark {
+      background-color: var(--dark-menu-item-fill);
+
+      /* 菜单项（黑色主题） */
+      & .el-menu-item {
+        color: var(--dark-menu-item-color);
+        &:hover {
+          color: var(--dark-menu-item-hover-color);
+          background-color: var(--dark-menu-item-hover-fill);
+        }
+        @when active {
+          color: var(--dark-menu-item-hover-color);
+          background-color: var(--dark-menu-item-active-fill);
+        }
+      }
+
+      /* 子菜单（黑色主题） */
+      & .el-submenu {
+        @when opened {
+          background-color: var(--dark-menu-sub-fill);
+        }
+        @when active {
+          & > .el-submenu__title {
+            color: var(--dark-menu-item-hover-color);
+          }
+        }
+        .el-menu {
+          background-color: var(--dark-menu-sub-fill);
+
+          & .el-menu-item:hover {
+            color: var(--dark-menu-item-hover-color);
+            background-color: var(--dark-menu-sub-fill);
+          }
+        }
+      }
+
+      /* 子菜单的父级（黑色主题） */
+      & .el-submenu__title {
+        color: var(--dark-menu-item-color);
+        &:hover {
+          color: var(--dark-menu-item-hover-color);
+        }
+      }
+
+      /* 菜单折叠（黑色主题） */
+      &.el-menu--collapse {
+        /* 菜单折叠时，菜单项选中样式 */
+        .el-menu-item.is-active,
+        .el-submenu.is-active:not(.is-opened) > .el-submenu__title {
+          color: var(--dark-menu-item-hover-color);
+          background-color: var(--dark-menu-item-active-fill);
+          font-weight: bold;
+        }
+        
+        .el-submenu .el-menu {
+          background-color: var(--dark-menu-sub-fill);
+          box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .2);
+        }
+      }
+
+      /* 子菜单被选中，但是子菜单被收起时（黑色主题） */
+      & .el-submenu.is-active:not(.is-opened) > .el-submenu__title,
+      &.el-menu--collapse > .el-menu-item.is-active,
+      &.el-menu--collapse > .el-submenu.is-active:not(.is-opened) > .el-submenu__title {
+        color: var(--dark-menu-item-hover-color);
+        background-color: var(--dark-menu-item-active-fill);
+        font-weight: normal;
+        &:before {
+          transform: scaleY(1);
+          -ms-transform: scaleY(1);
+        }
+      }
+    }
+
+    /* 水平导航菜单 */
+    @m horizontal {
+      & .el-menu-item {
+        float: left;
+        height: 60px;
+        line-height: 60px;
+        margin: 0;
+        cursor: pointer;
+        position: relative;
+        box-sizing: border-box;
+        border-bottom: 5px solid transparent;
+        border-left: none;
+
+        a,
+        a:hover {
+          color: inherit;
+        }
+
+        &:hover {
+          background-color: var(--menu-item-hover-fill);
+        }
+
+        /* 移除水平导航左侧的 border 动画 */
+        &:before {
+          border-left: 0;
+        }
+      }
+      & .el-submenu {
+        float: left;
+        position: relative;
+
+        @when active {
+          &:not(.is-open) > .el-submenu__title:before {
+            transform: scaleY(.0001);
+            -ms-transform: scaleY(.0001);
+          }
+        }
+
+        > .el-menu {
+          position: absolute;
+          top: 65px;
+          left: 0;
+          border:1px solid var(--color-base-gray);
+          padding: 5px 0;
+          background-color: var(--color-white);
+          z-index: 100;
+          min-width: 100%;
+          box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12), 0 0 6px 0 rgba(0,0,0,0.04);
+        }
+
+        & .el-submenu__title {
+          height: 60px;
+          line-height: 60px;
+          border-bottom: 5px solid transparent;
+          border-left: none;
+        }
+
+        & .el-menu-item {
+          background-color: var(--color-white);
+          float: none;
+          height: 36px;
+          line-height: 36px;
+          padding: 0 10px;
+        }
+
+        & .el-submenu__icon-arrow {
+          position: static;
+          vertical-align: middle;
+          margin-left: 5px;
+          color: var(--color-light-silver);
+          margin-top: -3px;
+        }
+      }
+      & .el-menu-item:hover,
+      & .el-submenu__title:hover {
+        background-color: var(--menu-item-fill);
+      }
+      & > .el-menu-item:hover,
+      & > .el-submenu:hover .el-submenu__title,
+      & > .el-submenu.is-active .el-submenu__title {
+        border-bottom: 5px solid var(--color-primary);
+      }
+
+      &.el-menu--dark {
+        & .el-menu-item:hover,
+        & .el-submenu__title:hover {
+          background-color: var(--dark-menu-item-fill);
+          & .el-submenu__icon-arrow {
+            color: var(--color-white);
+          }
+        }
+
+        & .el-submenu {
+          .el-menu-item,
+          .el-submenu-title {
+            color: var(--color-extra-light-black);
+
+            &:hover {
+              background-color: var(--color-base-gray);
+            }
+          }
+          .el-menu-item.is-active {
+            color: var(--color-primary);
+          }
+        }
+      }
+    }
+
+    /* 菜单折叠样式 */
+    @m collapse {
+      width: 48px;
+
+      > .el-menu-item,
+      > .el-submenu > .el-submenu__title {
+        .el-submenu__icon-arrow {
+          display: none;
+        }
+        span {
+          height: 0;
+          width: 0;
+          overflow: hidden;
+          visibility: hidden;
+          display: inline-block;
+        }
+      }
+
+      .el-menu .el-submenu {
+        min-width: 200px;
+      }
+      
+      /* 菜单折叠时，菜单项选中样式 */
+      .el-menu-item.is-active,
+      .el-submenu.is-active:not(.is-opened) > .el-submenu__title {
+        color: var(--menu-item-hover-color);
+        background-color: var(--color-white);
+        font-weight: bold;
+      }
+
+      /* 菜单折叠时，子菜单样式 */
+      .el-submenu {
+        position: relative;
+        & .el-menu {
+          position: absolute;
+          margin-left: 5px;
+          top: 0;
+          left: 100%;
+          z-index: 10;
+          background-color: var(--color-white);
+          box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .2);
+        }
+
+        @when opened {
+          background-color: transparent;
+          > .el-submenu__title .el-submenu__icon-arrow {
+            transform: none;
+            -ms-transform: none;
+          }
+        }
+
+        .el-menu-item,
+        .el-submenu__title {
+          height: 32px;
+          line-height: 32px;
+          padding-left: 14px;
+          /* 移除菜单折叠时左侧的 border 动画 */
+          &:before {
+            /*border-left: 0;*/
+            transform: scaleY(.0001);
+            -ms-transform: scaleY(.0001);
+          }
+        }
+      }
+
+      /* 收起时一级菜单选中样式，覆盖之前样式 */
+      & > .el-menu-item.is-active,
+      & > .el-submenu.is-active:not(.is-opened) > .el-submenu__title {
+        color: var(--menu-item-hover-color);
+        background-color: var(--menu-item-active-fill);
+        font-weight: normal;
+      }
+
+      /* 收起时一级菜单高度重新置为40px，覆盖之前样式 */
+      & > .el-submenu > .el-submenu__title {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 10px;
+      }
+    }
+  }
+
+  /* 菜单项 */
+  @b menu-item {
+    @extend menu-item;
+    
+    & * {
+      vertical-align: middle;
+    }
+    &:first-child {
+      margin-left: 0;
+    }
+    &:last-child {
+      margin-right: 0;
+    }
+    &:hover {
+      color: var(--menu-item-hover-color);
+    }
+    /* 选中样式左侧border的动画效果 */
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -2px;
+      border-left: 2px solid var(--color-primary);
+      transform: scaleY(.0001);
+      -ms-transform: scaleY(.0001);
+      transition: all .3s linear;
+    }
+    @when active {
+      color: var(--menu-item-hover-color);
+      background-color: var(--menu-item-active-fill);
+      &:before {
+        transform: scaleY(1);
+        -ms-transform: scaleY(1);
+      }
+    }
+    > span {
+      position: relative;
+      top: -2px;
+    }
+  }
+  
+  /* 子菜单 */
+  @b submenu {
+    transition: all .3s;
+    @e title {
+      position: relative;
+      @extend menu-item;
+
+      &:hover {
+        color: var(--menu-item-hover-color);
+      }
+
+      & * {
+        vertical-align: middle;
+      }
+    }
+    & .el-menu {
+      background-color: var(--menu-sub-fill);
+    }
+    & .el-menu-item {
+      height: 40px;
+      line-height: 40px;
+      padding: 0 45px;
+      min-width: 200px;
+
+      &:hover {
+        color: var(--menu-item-hover-color);
+      }
+    }
+    @e icon-arrow {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      margin-top: -8px;
+      transition: transform .3s;
+      font-size: 16px;
+    }
+    
+    & > .el-submenu__title:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -2px;
+      border-left: 2px solid var(--color-primary);
+      transform: scaleY(.0001);
+      -ms-transform: scaleY(.0001);
+      transition: all .3s linear;
+    }
+    @when active {
+      /* 子菜单被选中，但是子菜单被收起时 */
+      &:not(.is-opened) > .el-submenu__title {
+        color: var(--menu-item-hover-color);
+        background-color: var(--menu-item-active-fill);
+        &:before {
+          transform: scaleY(1);
+          -ms-transform: scaleY(1);
+        }
+      }
+    }
+    @when opened {
+      background-color: var(--menu-sub-fill);
+      > .el-submenu__title .el-submenu__icon-arrow {
+        transform: rotateZ(180deg);
+        -ms-transform: rotate(180deg);
+      }
+    }
+  }
+
+  /* 菜单分组 */
+  @b menu-item-group {
+    > ul {
+      padding: 0;
+    }
+    @e title {
+      padding: 8px 0 8px 20px;
+      line-height: normal;
+      font-size: 12px;
+      color: var(--color-light-silver);
+    }
+  }
+}
+
+.el-menu-collapse-wrap {
+  position: absolute;
+  padding-left: 4px;
+  .el-menu-item {
+    min-width: 200px;
+  }
+}
+
+/* 图标 */
+.el-menu-item,
+.el-submenu__title,
+.el-menu--collapse > .el-menu-item,
+.el-menu--collapse > .el-submenu > .el-submenu__title,
+.el-menu--colloase-btn > .el-submenu__title {
+  .el-menu-icon {
+    position: relative;
+    top: -2px;
+    margin: 0;
+    vertical-align: middle;
+    width: 24px;
+    font-size: 16px;
+    text-align: center;
+  }
+}
+.el-menu-item .el-menu-icon,
+.el-submenu__title .el-menu-icon {
+  margin-right: 12px;
+}
+
+.el-menu.is-no-icon .el-menu-icon {
+  display: none;
+}
+
+.horizontal-collapse-transition .el-submenu__title .el-submenu__icon-arrow {
+  transition: .3s;
+  opacity: 0;
+}

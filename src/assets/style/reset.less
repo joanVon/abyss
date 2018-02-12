@@ -1,0 +1,34 @@
+@borderColor: #e6e6e6;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// 清除IE文本框自带清除键 可视键 IE10+
+input::-ms-clear,
+​input::-ms-reveal {
+  display: none;
+}
+​
+/* ========== placeholder 默认样式修改 ========== */
+input::-webkit-input-placeholder,
+input:-ms-input-placeholder,
+input:-moz-placeholder,
+​​input::-moz-placeholder {
+  color: @borderColor;     // 文本颜色
+}
+​
+/* ========== chrome 记住密码样式覆盖 ========== */
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 46px #666666 inset;
+  -webkit-text-fill-color: inherit;
+  color:  inherit;
+  border-color: @borderColor;
+}

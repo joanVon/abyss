@@ -1,0 +1,161 @@
+/* ==================================
+   global mixins 常用mixins
+   ================================== */
+
+//  尺寸
+.size(@w, @h) {
+  width: @w;
+  height: @h;
+}
+
+.full-size() {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+// 清除浮动
+.clearfix() {
+  zoom: 1;
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// 文本省略
+.txt-ellipsis() {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 布局 - 包含hack
+.border-box() {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.flexbox() {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.inline-block() {
+  display: inline-block;
+  vertical-align: top;
+}
+
+// 垂直居中
+.vetical-middle() {
+  transform: translate(0%, 50%);
+  /* IE 9 */
+  -ms-transform: translate(0%, 50%);
+  /* Firefox */
+  -moz-transform: translate(0%, 50%);
+  /* Safari Chrome */
+  -webkit-transform: translate(0%, 50%);
+  -o-transform: translate(0%, 50%);
+}
+
+// 绝对垂直水平居中
+.vetical-align-center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* IE 9 */
+  -ms-transform: translate(-50%, -50%);
+  /* Firefox */
+  -moz-transform: translate(-50%, -50%);
+  /* Safari Chrome */
+  -webkit-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+
+
+/* =============== line full-size 分割线 上 左 下 右 =============== */
+
+.hairline(@position, @color) when (@position =top) {
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: auto;
+    right: auto;
+    height: 1px;
+    width: 100%;
+    background-color: @color;
+    display: block;
+    z-index: 15;
+  }
+}
+
+.hairline(@position, @color) when (@position =left) {
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: auto;
+    right: auto;
+    width: 1px;
+    height: 100%;
+    background-color: @color;
+    display: block;
+    z-index: 15;
+  }
+}
+
+.hairline(@position, @color) when (@position =bottom) {
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    top: auto;
+    height: 1px;
+    width: 100%;
+    background-color: @color;
+    display: block;
+    z-index: 15;
+  }
+}
+
+.hairline(@position, @color) when (@position =right) {
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: auto;
+    bottom: auto;
+    width: 1px;
+    height: 100%;
+    background-color: @color;
+    display: block;
+    z-index: 15;
+  }
+}
+
+// Mobile
+
+/* === 以2倍像素分辨率为例  如 640 和 320 分辨率的设备下获取不同分辨率的图片(命名规范)资源 === */
+
+.at2x(@path, @w, @h, @ext: "png") {
+  background-image: url("../img/@{path}.@{ext}");
+  @media screen and (-webkit-min-device-pixel-ratio: 2), screen and (min-device-pixel-ratio: 2) {
+    background-image: url("../img/@{path}@2x.@{ext}");
+  }
+  background-repeat: no-repeat;
+  background-size: @w @h;
+}
