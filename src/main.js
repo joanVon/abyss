@@ -4,13 +4,11 @@ import 'babel-polyfill'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import HUI from 'hui'
 import Element from 'element-ui'
 import i18n from './i18n'
 
 import 'normalize.css'
 import './assets/style/reset.less'
-// import './libs/theme-bui/index.css'  // hui 编译后自定义皮肤
 import 'element-ui/lib/theme-chalk/index.css'
 
 import App from './App'

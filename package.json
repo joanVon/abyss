@@ -1,8 +1,8 @@
 {
-  "name": "web-cms",
+  "name": "abyss",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "fengqiong <fengqiong@hikvision.com.cn>",
+  "author": "fengqiong <fqjoan@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -11,8 +11,7 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "build": "node build/build.js",
-    "theme-bui": "gulp build"
+    "build": "node build/build.js"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -26,7 +25,6 @@
     "gulp-postcss": "^7.0.1",
     "gulp-stylefmt": "^1.1.0",
     "gulp-stylelint": "^6.0.0",
-    "hui": "git+https://fengqiong@git.hikvision.com.cn/scm/hik/hui.git",
     "js-sha256": "^0.9.0",
     "json-loader": "^0.5.7",
     "json-templater": "^1.2.0",

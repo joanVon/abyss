@@ -1,4 +1,4 @@
-import hui from 'hui/lib/locale/lang/zh-CN.js'
+import hui from 'element-ui/lib/locale/lang/zh-CN.js'
 import login from './modules/login'
 import guide from './modules/guide'
 

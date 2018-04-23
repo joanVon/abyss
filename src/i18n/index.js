@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import cn from './zh_CN/index'
 import en from './en_US/index'
-import huiLocale from 'hui/lib/locale'
+import huiLocale from 'element-ui/lib/locale'
 // import http from '@/api/index'  // 后期服务端数据 国际化接口调用
 
 Vue.use(VueI18n)
