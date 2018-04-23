@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import cn from './zh_CN/index'
 import en from './en_US/index'
-import huiLocale from 'element-ui/lib/locale'
+import elementLocale from 'element-ui/lib/locale'
 // import http from '@/api/index'  // 后期服务端数据 国际化接口调用
 
 Vue.use(VueI18n)
@@ -23,7 +23,6 @@ const i18n = new VueI18n({
   }
 })
 
-// 转换hui组件语言包配置
-huiLocale.i18n((key, value) => i18n.t(key, value))
+elementLocale.i18n((key, value) => i18n.t(key, value))
 
 export default i18n

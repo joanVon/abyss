@@ -20,7 +20,6 @@ Vue.config.productionTip = false
 Vue.prototype.router = router
 Vue.use(Vuex)
 Vue.use(Element)
-// Vue.use(HUI)
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import i18n from '@/i18n'
-import { Notification } from 'hui'
+import { Notification } from 'element-ui'
 
 const http = axios.create({
   timeout: 60000,
