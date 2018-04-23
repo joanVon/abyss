@@ -1,6 +1,6 @@
 <template>
   <div class="guide">
-    <el-scrollbar wrap-class="layout-article" :size="5" :opcity="0.2" tag="article">
+    <el-scrollbar wrap-class="layout-article" tag="article">
       <!-- <section v-for="(sec, $index) in sections" class="guide-section" :class="'section-floor-'+($index+1)">{{sec.title}}</section> -->
 
       <el-button>主要按钮</el-button>
