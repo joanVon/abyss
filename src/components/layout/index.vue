@@ -27,5 +27,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
-
+.layout-container {
+  padding-top: 60px;
+}
 </style>
