@@ -1,31 +1,29 @@
 <template>
   <div class="guide">
-    <el-scrollbar wrap-class="layout-article" tag="article">
+    <!-- <el-scrollbar wrap-class="layout-article" tag="article"> -->
       <!-- <section v-for="(sec, $index) in sections" class="guide-section" :class="'section-floor-'+($index+1)">{{sec.title}}</section> -->
 
       <el-button>主要按钮</el-button>
-    </el-scrollbar>
+    <!-- </el-scrollbar> -->
   </div>
 </template>
 
 <script>
 import './style.less'
+import proxy from './proxy'
 export default {
   name: 'Guide',
   // components: { Layout },
   data () {
     return {
-      userItems: [
-        { name: 'User Name', disabled: false },
-        { name: 'User Information', disabled: false },
-        { name: 'Logout', disabled: false }
-      ],
-      sections: [
-        { 'title': this.$t('m.title'), 'desc': 'aaaaaaaaaaa' },
-        { 'title': 'B', 'desc': 'bbbbbbbbbbb' },
-        { 'title': 'C', 'desc': 'ccccccccccc' }
-      ]
+
     }
+  },
+
+  mounted () {
+    proxy.getTotalPage().then(res => {
+      console.log(res.data.data)
+    })
   }
 }
 </script>

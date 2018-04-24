@@ -1,13 +1,22 @@
 <template>
-  <Container></Container>
+  <!-- <Container></Container> -->
+
+  <div class="layout-view">
+    <Header></Header>
+    <!-- <nav class="layput-sidebar"></nav> -->
+    <div class="layout-container">
+      <router-view></router-view>
+    </div>
+    
+  </div>
 </template>
 
 <script>
 
-import Container from './Container'
+import Header from './Header'
 export default {
   name: 'Layout',
-  components: { Container },
+  components: { Header },
   data () {
     return {
 

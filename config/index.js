@@ -11,20 +11,17 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/mock': {
-        target: 'https://www.easy-mock.com/mock/5a618ea0f589eb5d9a9761ef/api',
+      '/api': {
+        target: 'https://www.easy-mock.com/mock/5adf1aee5cbcb66de34da660',
         changeOrigin: true,
-        pathRewrite: {
-          '^/mock': '/'
-        },
         // 针对获取不到证书的问题
-        // secure: false
+        secure: false
       }
     },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8081, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

@@ -3,6 +3,6 @@ import Guide from './index'
 export default [
   {
     path: '/guide',
-    name: 'guide',
+    name: 'Guide',
     component: Guide
   }]

@@ -1,16 +1,8 @@
 <template>
   <header class="layout-header">
+    <div class="layout-header-logo">ERP</div>
     <div class="layout-header-btns">
-      <!-- <el-button type="iconButton" icon="h-icon-about"></el-button>
-      <el-button type="iconButton" icon="h-icon-help"></el-button>
-      <el-dropdown trigger="click">
-        <span class="el-dropdown-link">
-          <el-button type="iconButton" icon="h-icon-user"></el-button>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(item, $index) in userItems" :key="$index" :divided="$index === 2" :disabled="item.disabled">{{item.name}}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
+      <el-button type="text">退出</el-button>
     </div>
   </header>
 </template>

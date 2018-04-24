@@ -1,0 +1,66 @@
+{
+    "sync.gist": "dd209a7266323d9b77ee8bf882f44fe7",
+    "sync.lastUpload": "2017-07-10T02:27:50.316Z",
+    "sync.autoDownload": false,
+    "sync.autoUpload": true,
+    "sync.lastDownload": "2017-07-24T05:40:12.199Z",
+    "sync.forceDownload": false,
+    "sync.anonymousGist": false,
+    "sync.host": "",
+    "sync.pathPrefix": "",
+    "sync.quietSync": false,
+    "sync.askGistName": false,
+    "git.enableSmartCommit": true,
+    "workbench.colorTheme": "One Dark Pro",
+    "window.zoomLevel": 0,
+    "editor.fontSize": 16,
+    "editor.lineHeight": 0,
+    "editor.tabSize": 2,
+    "eslint.validate": [
+        "javascript",
+        "html",
+        {
+            "language": "vue",
+            "autoFix": true
+        }
+    ],
+    "emmet.syntaxProfiles": {
+        "vue-html": "html",
+        "vue": "html"
+    },
+    "emmet.showAbbreviationSuggestions": true,
+    "emmet.showExpandedAbbreviation": "always",
+    "emmet.includeLanguages": {
+        "vue-html": "html",
+        "vue": "html"
+    },
+    "eslint.run": "onSave",
+    "eslint.autoFixOnSave": true,
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "element-helper.version": "2.0",
+    "git.confirmSync": false,
+    "files.autoSave": "off",
+    "workbench.iconTheme": "vscode-icons",
+    "fileheader.Author": "fengqiong",
+    "fileheader.LastModifiedBy": "fengqiong",
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    "sublimeTextKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.snippetSuggestions": "top",
+    "editor.formatOnPaste": false,
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "vetur.validation.template": false,
+    "gitlens.keymap": "alternate",
+    "gitlens.advanced.messages": {
+        "suppressCommitHasNoPreviousCommitWarning": false,
+        "suppressCommitNotFoundWarning": false,
+        "suppressFileNotUnderSourceControlWarning": false,
+        "suppressGitVersionWarning": false,
+        "suppressLineUncommittedWarning": false,
+        "suppressNoRepositoryWarning": false,
+        "suppressResultsExplorerNotice": false,
+        "suppressShowKeyBindingsNotice": true
+    }
+}

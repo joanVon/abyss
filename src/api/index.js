@@ -3,28 +3,45 @@ import i18n from '@/i18n'
 import { Notification } from 'element-ui'
 
 const http = axios.create({
-  timeout: 60000,
+  timeout: 10000,
   withCredentials: false,
   headers: {'X-Requested-With': 'XMLHttpRequest'}
 })
 
+// 添加响应拦截器
+http.interceptors.request.use(function (config) {
+  // 配置发送请求的信息
+  // 在发送请求之前做某事
+  config.url += '?t=' + Date.now()
+  return config
+}, function (error) {
+  // 请求错误时做些事
+  return Promise.reject(error)
+})
+
 // Response
-http.interceptors.response.use(function (res) {
+http.interceptors.response.use(function (response) {
   // 错误统一处理
-  if (res.data.code * 1 !== 0) {
-    if (res.data.message) {
+  if (response.data.ret * 1 !== 0) {
+    if (response.data.message) {
       Notification.error({
-        message: i18n.t(res.data.message)
+        message: i18n.t(response.data.message)
+      })
+    } else {
+      Notification.error({
+        message: '系统错误'
       })
     }
-    return Promise.reject(res.data.code)
+    return Promise.reject(response.data.code)
   }
 
   return Promise.resolve({
-    message: res.data.message,
-    data: res.data.data
+    message: response.data.message,
+    data: response.data.data
   })
 }, function (error) {
   // Response Error
   return Promise.reject(error)
 })
+
+export default http
