@@ -2,7 +2,7 @@
   <header class="layout-header">
     <div class="layout-header-logo">ERP</div>
     <div class="layout-header-btns">
-      <el-button type="text">退出</el-button>
+      <el-button icon="el-icon-setting" circle></el-button>
     </div>
   </header>
 </template>
