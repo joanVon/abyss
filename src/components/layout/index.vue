@@ -5,7 +5,7 @@
     <Header></Header>
     <el-button class="collapse-menu-btn" :class="isCollapse===false ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'" @click="isCollapse = !isCollapse"></el-button>
     <nav class="layput-sidebar">
-      <el-menu default-active="/guide" router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" active-text-color="#409EFF">
+      <el-menu default-active="/guide" router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#333744" text-color="#f8f8f8" active-text-color="#fff">
         <el-menu-item index="/guide">
           <i class="el-icon-menu"></i>
           <span slot="title">导航</span>
@@ -79,9 +79,9 @@ export default {
 }
 .collapse-menu-btn {
   position: absolute;
-  bottom: 50px;
+  bottom: 35px;
   left: 0;
-  color: #409EFF;
+  color: #f8f8f8;
   z-index: 2;
   font-size: 20px;
   padding: 0 0 0 20px;
@@ -89,7 +89,7 @@ export default {
   border: 0 none;
 
   &:hover {
-    color: #409EFF;
+    color: #fff;
   }
 }
 .layput-sidebar {

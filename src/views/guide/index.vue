@@ -4,7 +4,7 @@
     <!-- <el-button>主要按钮</el-button> -->
 
     <div class="table-operate-bar">
-      <el-button type="text" icon="el-icon-plus">新建工程</el-button>
+      <el-button type="text" icon="el-icon-plus" @click="newProject">新建工程</el-button>
     </div>
     <div class="table-operate-column">
       <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
@@ -14,6 +14,14 @@
     </div>
     <el-table ref="guideTableRef" :data="guideTable" border stripe style="width: 100%" max-height="800">
       <el-table-column fixed="left" prop="projectNo" label="工程编号" width="100">
+        <template slot-scope="scope">
+        <el-button
+          @click="updaeInfo(scope.$index, scope.row)"
+          type="text"
+          size="small">
+          {{ scope.row.projectNo }}
+        </el-button>
+      </template>
       </el-table-column>
       <el-table-column prop="prov" label="省份">
       </el-table-column>
@@ -77,6 +85,13 @@ export default {
         // console.log(res.data)
         this.guideTable = res.data && res.data.rows
       })
+    },
+    newProject () {
+      this.$router.push({name: 'UpdateInfo'})
+    },
+    updaeInfo (index, row) {
+      console.log(row)
+      this.$router.push({name: 'UpdateInfo', params: {id: row.projectId}})
     }
   },
   beforeMount () {
