@@ -42,9 +42,12 @@
         </el-menu-item>
       </el-menu>
     </nav>
+
     <div class="layout-container" :class="{'container-collapse': isCollapse}">
-      <router-view></router-view>
+      <div class="page"><router-view></router-view></div>
+      
     </div>
+    
 
   </div>
 </template>
@@ -79,7 +82,7 @@ export default {
 }
 .collapse-menu-btn {
   position: absolute;
-  bottom: 35px;
+  bottom: 32px;
   left: 0;
   color: #f8f8f8;
   z-index: 2;
@@ -95,7 +98,7 @@ export default {
 .layput-sidebar {
   max-width: 200px;
   height: 100%;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 60px;
   z-index: 1;
@@ -107,10 +110,23 @@ export default {
 .layout-container {
   padding-top: 60px;
   padding-left: 210px;
-  height: inherit;
-
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   &.container-collapse {
     padding-left: 75px;
+  }
+
+  .page {
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding-left: inherit;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 

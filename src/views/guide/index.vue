@@ -1,13 +1,10 @@
 <template>
-  <div class="guide">
-    <!-- <section v-for="(sec, $index) in sections" class="guide-section" :class="'section-floor-'+($index+1)">{{sec.title}}</section> -->
-    <!-- <el-button>主要按钮</el-button> -->
-
+  <div class="page-content guide">
     <div class="table-operate-bar">
       <el-button type="text" icon="el-icon-plus" @click="newProject">新建工程</el-button>
     </div>
     <div class="table-operate-column">
-      <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+      <el-checkbox class="check-all-columns" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
       <el-checkbox-group v-model="checkedColumns" @change="handleCheckedChange">
         <el-checkbox v-for="(column, $index) in columns" :label="column" :key="$index">{{column}}</el-checkbox>
       </el-checkbox-group>
@@ -87,7 +84,7 @@ export default {
       })
     },
     newProject () {
-      this.$router.push({name: 'UpdateInfo'})
+      this.$router.push({name: 'UpdateInfo', params: {id: 'add'}})
     },
     updaeInfo (index, row) {
       console.log(row)
