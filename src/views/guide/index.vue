@@ -9,10 +9,10 @@
         <el-checkbox v-for="(column, $index) in columns" :label="column" :key="$index">{{column}}</el-checkbox>
       </el-checkbox-group> -->
 
-      <el-checkbox v-for="(column, $index) in columns" checked :label="column" :key="$index" @change="handleSingleChecked($event, column)">{{column}}</el-checkbox>
+      <el-checkbox v-for="(column, $index) in columns" checked :disabled="$index===0" :label="column" :key="$index" @change="handleSingleChecked($event, column)">{{column}}</el-checkbox>
     </div>
     <el-table ref="guideTableRef" :data="guideTable" border stripe style="width: 100%" max-height="800">
-      <el-table-column prop="projectNumber" label="工程编号">
+      <el-table-column prop="projectNumber" label="工程编号" width="140">
         <template slot-scope="scope">
           <el-button @click="updaeInfo(scope.$index, scope.row)" type="text" size="small">
             {{ scope.row.projectNumber }}

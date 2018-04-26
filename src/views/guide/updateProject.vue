@@ -4,7 +4,7 @@
     <el-tabs v-model="activeName" @tab-click="tabClick">
       <el-tab-pane label="工程信息" name="0">
         <el-form ref="infoForm" :model="form" label-width="200px" style="padding-bottom: 12px;">
-          <el-row type="flex" class="row-bg" justify="center">
+          <!-- <el-row type="flex" class="row-bg" justify="center">
             <el-col :span="8">
               <el-form-item label="品牌名称" :rules="[{ required: true, message: '请输入品牌名称', trigger: 'blur' }]">
                 <el-input placeholder="请输入内容" v-model="form.brandName">
@@ -12,12 +12,18 @@
               </el-form-item>
             </el-col>
             <el-col :span="8"></el-col>
-          </el-row>
+          </el-row> -->
           <el-row type="flex" class="row-bg" justify="center">
             <el-col :span="8">
               <el-form-item label="工程名称" :rules="[{ required: true, message: '请输入工程名称', trigger: 'blur' }]">
                 <el-cascader :options="cityInfo" placeholder="省(直辖市)/市/区" v-model="selectedOptions" :props="props" :change-on-select="true" :clearable="true" @change="handleChange">
                 </el-cascader>
+              </el-form-item>
+              <el-form-item label="品牌名称" :rules="[{ required: true, message: '请选择品牌名称', trigger: 'blur' }]">
+                <el-select v-model="form.brandName">
+                  <el-option label="中国黄金" value="中国黄金"></el-option>
+                  <el-option label="六桂福" value="六桂福"></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item label="工程属性" :rules="[{ required: true, message: '请选择属性', trigger: 'blur' }]">
                 <el-select v-model="form.projectAttribute">
@@ -45,15 +51,15 @@
                 </el-input>
               </el-form-item>
               <el-form-item label="接单日期" :rules="[{ required: true, message: '请选择日期', trigger: 'blur' }]">
-                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" v-model="form.orderAcceptTime">
+                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.orderAcceptTime">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="测量日期" :rules="[{ required: true, message: '请选择日期', trigger: 'blur' }]">
-                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" v-model="form.measuringTime">
+                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.measuringTime">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="预开日期" :rules="[{ required: true, message: '请选择日期', trigger: 'blur' }]">
-                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" v-model="form.predictStartTime">
+                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.predictStartTime">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="客户属性" :rules="[{ required: true, message: '请选择客户属性', trigger: 'blur' }]">
@@ -116,11 +122,11 @@
           <el-alert class="info-form-alert" title="尊敬的客户您好：" :description="alertTxt" center type="info" :closable="false">
           </el-alert>
           <!-- 更新工程信息表单操作 add -->
-          <el-form-item class="form-bottom-toolbar" v-if="!projectId">
+          <el-form-item class="form-bottom-toolbar" v-if="!projectId" label-width="0px">
             <el-button type="primary" @click="newProjectInfo('infoForm')" size="medium">保存</el-button>
             <el-button @click="cancelPanel" size="medium">取消</el-button>
           </el-form-item>
-          <el-form-item class="form-bottom-toolbar" v-if="projectId">
+          <el-form-item class="form-bottom-toolbar" v-if="projectId" label-width="0px">
             <el-button type="primary" @click="modifyInfo" size="medium">保存</el-button>
             <el-button @click="cancelPanel" size="medium">取消</el-button>
           </el-form-item>
@@ -152,18 +158,18 @@
         <el-table :data="projectGrid.itemList" border style="width: 100%" height="400" :summary-method="getSummaries" show-summary v-if="!isNextTable">
           <el-table-column label="序号" type="index" width="56">
           </el-table-column>
-          <el-table-column prop="name" label="单项名称">
+          <el-table-column prop="itemName" label="单项名称">
             <template slot-scope="scope">
               <span v-if="scope.$index === projectGrid.itemList.length-1">
                 税金
               </span>
-              <el-button v-else @click="moveToNext(scope.$index, priceTable)" type="text">
-                {{scope.row.name}}
+              <el-button v-else @click="moveToNext(scope.$index, scope.row)" type="text">
+                {{scope.row.itemName}}
               </el-button>
             </template>
 
           </el-table-column>
-          <el-table-column prop="price" label="金额">
+          <el-table-column prop="costMoney" label="金额">
           </el-table-column>
           <el-table-column label="单位">
             <template slot-scope="scope">
@@ -173,76 +179,79 @@
         </el-table>
 
         <!-- 下一阶段表格 -->
-        <el-table :data="logoPriceTable" border style="width: 100%" max-height="700" :span-method="arraySpanMethod" sum-text="合计" show-summary v-if="isNextTable">
-          <el-table-column label="序号" type="index" width="56">
-          </el-table-column>
-          <el-table-column prop="part" label="应用部位">
+        <el-table :data="logoProjectTable" style="width: 100%" max-height="700px" :span-method="arraySpanMethod" sum-text="合计" show-summary v-show="isNextTable">
+          <el-table-column label="" width="56">
             <template slot-scope="scope">
-              <el-select v-model="scope.part">
-                <el-option label="头门LOGO" value="0"></el-option>
-                <el-option label="收银台LOGO" value="1"></el-option>
-                <el-option label="主形象LOGO" value="2"></el-option>
+              <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="applyPart" label="应用部位" width="150">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.applyPart">
+                <el-option v-for="apply in applyPartEnums" :key="apply.name" :label="apply.name" :value="apply.name"></el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="duty" label="责任">
+          <el-table-column prop="response" label="责任" width="150">
             <template slot-scope="scope">
-              <el-select v-model="scope.duty">
-                <el-option label="甲供甲装" value="0"></el-option>
-                <el-option label="乙供乙装" value="1"></el-option>
+              <el-select v-model="scope.row.response">
+                <el-option v-for="response in responseEnums" :key="response.name" :label="response.name" :value="response.name"></el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="名称">
+          <el-table-column prop="fontName" label="名称" width="150">
             <template slot-scope="scope">
-              <el-select v-model="scope.name">
-                <el-option label="图边字" value="0"></el-option>
-                <el-option label="迷你字" value="1"></el-option>
-                <el-option label="刺绣字" value="2"></el-option>
+              <el-select v-model="scope.row.fontName">
+                <el-option v-for="fontName in fontNameEnums" :key="fontName.name" :label="fontName.name" :value="fontName.name"></el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="thick" label="字厚">
+          <el-table-column prop="wordThickness" label="字厚" width="80">
           </el-table-column>
-          <el-table-column prop="border" label="边框工艺">
+          <el-table-column prop="borderCraft" label="边框工艺" width="110">
           </el-table-column>
           <el-table-column label="LOGO标识费">
-            <el-table-column prop="logoNumber" label="数量">
+            <el-table-column prop="logoCount" label="数量" width="80">
             </el-table-column>
-            <el-table-column prop="logoUnit" label="单位">
+            <el-table-column label="单位" width="80">
             </el-table-column>
-            <el-table-column prop="logoUnivalent" label="单价">
+            <el-table-column prop="logoUnitPrice" label="单价" width="80">
             </el-table-column>
-            <el-table-column prop="logoSubtotal" label="小计">
+            <el-table-column prop="logoCostSummary" label="小计" width="80">
             </el-table-column>
           </el-table-column>
 
           <el-table-column label="电源费">
-            <el-table-column prop="model" label="型号">
+            <el-table-column prop="powerModel" label="型号" width="150">
+              <template slot-scope="scope">
+                <el-select v-model="scope.row.powerModel">
+                  <el-option v-for="powerModel in powerModelEnums" :key="powerModel.name" :label="powerModel.name" :value="powerModel.name"></el-option>
+                </el-select>
+              </template>
             </el-table-column>
-            <el-table-column prop="powerNumber" label="数量">
+            <el-table-column prop="powerCount" label="数量" width="80">
             </el-table-column>
-            <el-table-column prop="powerUnit" label="单位">
+            <el-table-column label="单位">
             </el-table-column>
-            <el-table-column prop="powerUnivalent" label="单价">
+            <el-table-column prop="powerUnitPrice" label="单价" width="80">
             </el-table-column>
-            <el-table-column prop="powerSubtotal" label="小计">
+            <el-table-column prop="powerCostSummary" label="小计" width="80">
             </el-table-column>
           </el-table-column>
 
           <el-table-column label="安装费">
-            <el-table-column prop="fixUnit" label="单位">
+            <el-table-column label="单位" width="80">
             </el-table-column>
-            <el-table-column prop="fixUnivalent" label="单价">
+            <el-table-column prop="installationUnitPrice" label="单价" width="80">
             </el-table-column>
-            <el-table-column prop="fixSubtotal" label="小计">
+            <el-table-column prop="installationCostSummary" label="小计" width="80">
             </el-table-column>
           </el-table-column>
         </el-table>
 
-        <div v-if="isNextTable" class="form-bottom-toolbar" style="line-height: 59px;">
+        <div v-show="isNextTable" class="form-bottom-toolbar" style="line-height: 59px;">
           <el-button type="primary" @click="submitTable" size="medium">保存</el-button>
-          <el-button @click="cancelTable" size="medium">取消</el-button>
+          <el-button @click="cancelLogoTable" size="medium">取消</el-button>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -253,6 +262,23 @@
 import _ from 'lodash'
 import cityData from '@/libs/city-data'
 import proxy from './proxy'
+
+const initTableItem = {
+  'applyPart': '',
+  'borderCraft': '',
+  'fontName': '',
+  'installationCostSummary': 0,
+  'installationUnitPrice': 0,
+  'logoCostSummary': 0,
+  'logoCount': 0,
+  'logoUnitPrice': 0,
+  'powerCostSummary': 0,
+  'powerCount': 0,
+  'powerModel': '',
+  'powerUnitPrice': 0,
+  'response': '',
+  'wordThickness': 0
+}
 export default {
   name: 'UpdateInfo',
   data () {
@@ -276,24 +302,16 @@ export default {
         projectName: '',
         address: '',
         projectNumber: '',
-        itemList: [
-          {name: 'LOGO标识类造价表', price: 200},
-          {name: 'LOGO标识类造价表1', price: 10},
-          {name: 'LOGO标识类造价表2', price: 60}
-        ],
+        itemList: [],
         tax: 0,
         total: 0
       },
-      /* priceTable: [
-        {
-          price: '200'
-        },
-        {
-          price: '30'
-        }
-      ], */
       isNextTable: false,
-      logoPriceTable: []
+      applyPartEnums: [],
+      responseEnums: [],
+      fontNameEnums: [],
+      powerModelEnums: [],
+      logoProjectTable: []
     }
   },
   computed: {
@@ -317,16 +335,17 @@ export default {
       this.$router.push({ name: 'Guide' })
     },
     // Tab 切换
-    tabClick (e) {
-      // console.log(e)
-    },
+    tabClick (e) { },
     // 造价详情
     getCostById () {
       proxy.getCostDetailById(this.projectId).then(res => {
         let resData = res.data
-        console.log(resData)
+        // console.log(resData)
         Object.assign(this.projectGrid, resData)
-        this.projectGrid.itemList.push({name: '税金', price: resData.tax})
+        this.projectGrid.itemList.push({
+          itemName: '税金',
+          costMoney: resData.tax
+        })
       })
       // this.projectGrid.itemList.push({name: '税金', price: 99})
     },
@@ -350,14 +369,17 @@ export default {
             this.$router.push({ name: 'Guide' })
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })
     },
     modifyInfo () {
       proxy.modifyProject(this.projectId, this.form).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
+        this.$message({
+          message: '工程信息修改成功',
+          type: 'success'
+        })
       })
     },
     cancelPanel () {
@@ -402,22 +424,59 @@ export default {
 
       return sums
     },
+
     arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex % 2 === 0) {
-        if (columnIndex === 0) {
-          return [1, 2]
-        } else if (columnIndex === 1) {
-          return [0, 0]
-        }
-      }
     },
 
     // 进入下个阶段
     moveToNext (index, data) {
-      this.isNextTable = !this.isNextTable
+      this.isNextTable = true
+      this.getEnum()
+      this.getLogoProject()
     },
 
-    cancelTable () {
+    getEnum () {
+      proxy.getAttributeEnum('applyPart').then(res => {
+        this.applyPartEnums = res.data
+      })
+      proxy.getAttributeEnum('response').then(res => {
+        this.responseEnums = res.data
+      })
+      proxy.getAttributeEnum('fontName').then(res => {
+        this.fontNameEnums = res.data
+      })
+      proxy.getAttributeEnum('powerModel').then(res => {
+        this.powerModelEnums = res.data
+      })
+    },
+
+    newTableRow (index) {
+      this.logoProjectTable.splice(index + 1, 0, Object.assign({}, initTableItem))
+    },
+    // 获取所有logo标志项目
+    getLogoProject () {
+      proxy.getAllLogoProject(this.projectId).then(res => {
+        this.logoProjectTable = res.data
+        if (!res.data || res.data.length === 0) {
+          this.logoProjectTable.push(Object.assign({}, initTableItem))
+        } else {
+          this.logoProjectTable = res.data
+        }
+      })
+    },
+
+    // 保存LOGO子集表
+    submitTable () {
+      // console.log(this.logoProjectTable)
+      proxy.saveLogoProjects(this.logoProjectTable).then(res => {
+        this.$message({
+          message: 'LOGO标志信息保存成功',
+          type: 'success'
+        })
+        this.isNextTable = false
+      })
+    },
+    cancelLogoTable () {
       this.$confirm('确认离开此页操作？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

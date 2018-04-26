@@ -23,6 +23,22 @@ export default {
 
   // 编辑工程信息
   modifyProject (id, data) {
-    return http.put('/v1/project/' + id, data)
+    return http.put('/v1/project/' + id, {editProjectDTO: data})
+  },
+
+  // GET /v1/item/logo/enum/{attributeName}
+  getAttributeEnum (attributeName) {
+    return http.get('/v1/item/logo/enum/' + attributeName)
+  },
+
+  // 获取所有LOGO标志类项目
+  getAllLogoProject (projectId) {
+    // GET /v1/item/logo/projectId/{projectId}
+    return http.get('/v1/item/logo/projectId/' + projectId)
+  },
+
+  // 批量保存Logo标志造价表
+  saveLogoProjects (data) {
+    return http.post('/v1/item/logo', {createLogoItemDTOList: data})
   }
 }
