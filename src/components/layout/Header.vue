@@ -3,7 +3,7 @@
     <div class="layout-header-inner">
       <div class="layout-header-logo">ERP</div>
       <div class="layout-header-btns">
-        <el-button icon="el-icon-setting" circle></el-button>
+        <!-- <el-button icon="el-icon-setting" circle></el-button> -->
       </div>
     </div>
   </header>

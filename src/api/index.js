@@ -23,7 +23,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (response) {
   // 错误统一处理
   if (response.data.ret * 1 !== 0) {
-    if (response.data.message) {
+    if (response.data.msg) {
       Notification.error({
         message: i18n.t(response.data.message)
       })

@@ -8,7 +8,7 @@
       <el-menu default-active="/guide" router class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#333744" text-color="#f8f8f8" active-text-color="#fff">
         <el-menu-item index="/guide">
           <i class="el-icon-menu"></i>
-          <span slot="title">导航</span>
+          <span slot="title">工程信息概览</span>
         </el-menu-item>
         <!-- <el-submenu index="/guide">
           <template slot="title">
@@ -30,25 +30,22 @@
         </el-submenu> -->
         <el-menu-item index="2" disabled>
           <i class="el-icon-news"></i>
-          <span slot="title">导航二</span>
+          <!-- <span slot="title">导航二</span> -->
         </el-menu-item>
         <el-menu-item index="3" disabled>
           <i class="el-icon-document"></i>
-          <span slot="title">导航三</span>
+          <!-- <span slot="title">导航三</span> -->
         </el-menu-item>
         <el-menu-item index="4" disabled>
           <i class="el-icon-setting"></i>
-          <span slot="title">导航四</span>
+          <!-- <span slot="title">导航四</span> -->
         </el-menu-item>
       </el-menu>
     </nav>
 
     <div class="layout-container" :class="{'container-collapse': isCollapse}">
       <div class="page"><router-view></router-view></div>
-      
     </div>
-    
-
   </div>
 </template>
 
