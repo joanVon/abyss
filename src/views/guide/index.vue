@@ -51,7 +51,7 @@ export default {
   name: 'Guide',
   data () {
     return {
-      showColumn: this.handleSingleChecked,
+      showColumn: true,
       guideTable: [],
       checkAll: true,
       checkedColumns: [],
@@ -91,7 +91,7 @@ export default {
         let columnClass = document.getElementsByClassName(col.id)
         if (checked === false && col.label === label) {
           console.log(col)
-          return false
+          returnfalse
           // columnClass.forEach(cls => {
           //   cls.style.display = 'none'
           // })
