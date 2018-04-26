@@ -10,35 +10,34 @@
       </el-checkbox-group> -->
 
       <el-checkbox v-for="(column, $index) in columns" checked :label="column" :key="$index" @change="handleSingleChecked($event, column)">{{column}}</el-checkbox>
-
     </div>
     <el-table ref="guideTableRef" :data="guideTable" border stripe style="width: 100%" max-height="800">
-      <el-table-column fixed="left" prop="projectNumber" label="工程编号" v-if="showColumn">
+      <el-table-column prop="projectNumber" label="工程编号">
         <template slot-scope="scope">
           <el-button @click="updaeInfo(scope.$index, scope.row)" type="text" size="small">
             {{ scope.row.projectNumber }}
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="province" label="省份" v-if="showColumn">
+      <el-table-column prop="province" label="省份">
       </el-table-column>
-      <el-table-column prop="city" label="城市" v-if="showColumn">
+      <el-table-column prop="city" label="城市">
       </el-table-column>
-      <el-table-column prop="county" label="区/县/镇" v-if="showColumn">
+      <el-table-column prop="county" label="区/县/镇">
       </el-table-column>
-      <el-table-column prop="address" label="地址" v-if="showColumn">
+      <el-table-column prop="address" label="地址">
       </el-table-column>
-      <el-table-column prop="brandName" label="品牌名称" v-if="showColumn">
+      <el-table-column prop="brandName" label="品牌名称">
       </el-table-column>
-      <el-table-column prop="customerName" label="客户姓名" v-if="showColumn">
+      <el-table-column prop="customerName" label="客户姓名">
       </el-table-column>
-      <el-table-column prop="customerPhone" label="客户电话" v-if="showColumn">
+      <el-table-column prop="customerPhone" label="客户电话">
       </el-table-column>
-      <el-table-column prop="builtArea" label="店铺面积" v-if="showColumn">
+      <el-table-column prop="builtArea" label="店铺面积">
       </el-table-column>
-      <el-table-column prop="projectAttribute" label="工程属性" v-if="showColumn">
+      <el-table-column prop="projectAttribute" label="工程属性">
       </el-table-column>
-      <el-table-column fixed="right" prop="storeAttribute" label="店铺属性" v-if="showColumn">
+      <el-table-column prop="storeAttribute" label="店铺属性">
       </el-table-column>
     </el-table>
   </div>
@@ -51,7 +50,6 @@ export default {
   name: 'Guide',
   data () {
     return {
-      showColumn: true,
       guideTable: [],
       checkAll: true,
       checkedColumns: [],
@@ -60,63 +58,26 @@ export default {
     }
   },
 
-  watch: {
-    // checkedColumns (nList) {
-    //   console.log(nList)
-    //   let tableColumns = this.$refs.guideTableRef.columns
-    //   console.log(this.$refs.guideTableRef)
-
-    //   let colLabels = []
-
-    //   tableColumns.forEach(col => {
-    //     colLabels.push(col.label)
-    //     // if(col.label) {}
-    //   })
-    //   let difference = colLabels.concat(nList).filter(v => !colLabels.includes(v) || !nList.includes(v))
-    //   console.log(difference)
-    // }
-  },
   methods: {
-    // handleCheckAllChange (val) {
-    //   this.checkedColumns = val ? this.columns : []
-    //   this.isIndeterminate = false
-    // },
     handleSingleChecked (checked, label) {
-      console.log(checked)
-      console.log(label)
-
       let tableColumns = this.$refs.guideTableRef.columns
 
       tableColumns.forEach(col => {
         let columnClass = document.getElementsByClassName(col.id)
         if (checked === false && col.label === label) {
-          console.log(col)
-          returnfalse
-          // columnClass.forEach(cls => {
-          //   cls.style.display = 'none'
-          // })
-          // for (let i in columnClass) {
-          //   // columnClass[i].style.display = 'none'
-          //   columnClass[i].hidden = true
-          // }
-        } else if (checked === true && col.label === label) {
-          columnClass.forEach(cls => {
-            cls.style.display = 'table-cell'
-          })
-        }
-/* else {
-          for (let j in columnClass) {
-            // columnClass[j].style.display = 'table-cell'
-            columnClass[j].hidden = false
+          for (let idx = 0; idx < columnClass.length; idx++) {
+            let ccls = columnClass[idx]
+            ccls.style.display = 'none'
           }
-        } */
-        // if(col.label) {}
+        } else if (checked === true && col.label === label) {
+          for (let idx = 0; idx < columnClass.length; idx++) {
+            let ccls = columnClass[idx]
+            ccls.style.display = 'table-cell'
+          }
+        }
       })
-
-      // if(checked)
     },
-    handleCheckedChange (value) {
-      console.log(value)
+    /* handleCheckedChange (value) {
       let tableColumns = this.$refs.guideTableRef.columns
       let colLabels = []
       tableColumns.forEach(col => {
@@ -124,20 +85,10 @@ export default {
       })
       let difference = colLabels.concat(value).filter(v => !colLabels.includes(v) || !value.includes(v))
       console.log(difference)
-
-      /* tableColumns.forEach(column => {
-        if (difference.includes(column.label)) {  // 包含一样的标签
-          console.log(document.querySelectorAll('.' + column.id))
-          for (let i in document.querySelectorAll('.' + column.id)) {
-            document.querySelectorAll('.' + column.id)[i].hidden = true
-          }
-        }
-      }) */
-
       let checkedCount = value.length
       this.checkAll = checkedCount === this.columns.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.columns.length
-    },
+    }, */
     queryTable () {
       proxy.getTotalPage().then(res => {
         this.guideTable = res.data && res.data
@@ -147,7 +98,6 @@ export default {
       this.$router.push({ name: 'UpdateInfo', params: { id: 'add' } })
     },
     updaeInfo (index, row) {
-      console.log(row)
       this.$router.push({ name: 'UpdateInfo', params: { id: row.id } })
     }
   },
@@ -160,13 +110,6 @@ export default {
     tableCols.forEach(col => {
       this.columns.push(col.label)
     })
-
-    // this.handleCheckAllChange(true)
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less" scoped>
-
-</style>

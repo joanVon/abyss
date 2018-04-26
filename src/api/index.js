@@ -25,18 +25,18 @@ http.interceptors.response.use(function (response) {
   if (response.data.ret * 1 !== 0) {
     if (response.data.msg) {
       Notification.error({
-        message: i18n.t(response.data.message)
+        message: i18n.t(response.data.msg)
       })
     } else {
       Notification.error({
         message: '系统错误'
       })
     }
-    return Promise.reject(response.data.code)
+    return Promise.reject(response.data.ret)
   }
 
   return Promise.resolve({
-    message: response.data.message,
+    message: response.data.msg,
     data: response.data.data
   })
 }, function (error) {
