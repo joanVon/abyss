@@ -235,16 +235,16 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="powerCount" label="数量" width="80" @change="calculatePower(scope.$index, scope.row)">
+            <el-table-column prop="powerCount" label="数量" width="80">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.powerCount"></el-input>
+                <el-input v-model="scope.row.powerCount" @change="calculatePower(scope.$index, scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="单位" width="80">
             </el-table-column>
-            <el-table-column prop="powerUnitPrice" label="单价" width="80" @change="calculatePower(scope.$index, scope.row)">
+            <el-table-column prop="powerUnitPrice" label="单价" width="80">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.powerUnitPrice"></el-input>
+                <el-input v-model="scope.row.powerUnitPrice" @change="calculatePower(scope.$index, scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="powerCostSummary" label="小计" width="80">

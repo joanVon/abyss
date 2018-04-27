@@ -89,7 +89,7 @@ export default {
   border: 0 none;
 
   &:hover {
-    color: #fff;
+    color: teal;
   }
 }
 .layput-sidebar {

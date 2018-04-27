@@ -39,6 +39,6 @@ export default {
 
   // 批量保存Logo标志造价表
   saveLogoProjects (data) {
-    return http.post('/service/v1/item/logo', {createLogoItemDTOList: data})
+    return http.post('/service/v1/item/logo', data)
   }
 }
