@@ -213,14 +213,14 @@
           <el-table-column label="LOGO标识费">
             <el-table-column prop="logoCount" label="数量" width="80">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.logoCount"></el-input>
+                <el-input v-model="scope.row.logoCount" @change="calculateLogo(scope.$index, scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="单位" width="80">
             </el-table-column>
             <el-table-column prop="logoUnitPrice" label="单价" width="80">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.logoUnitPrice"></el-input>
+                <el-input v-model="scope.row.logoUnitPrice" @change="calculateLogo(scope.$index, scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="logoCostSummary" label="小计" width="80">
@@ -235,14 +235,14 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="powerCount" label="数量" width="80">
+            <el-table-column prop="powerCount" label="数量" width="80" @change="calculatePower(scope.$index, scope.row)">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.powerCount"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="单位" width="80">
             </el-table-column>
-            <el-table-column prop="powerUnitPrice" label="单价" width="80">
+            <el-table-column prop="powerUnitPrice" label="单价" width="80" @change="calculatePower(scope.$index, scope.row)">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.powerUnitPrice"></el-input>
               </template>
@@ -254,7 +254,7 @@
           <el-table-column label="安装费">
             <el-table-column label="单位" width="80">
             </el-table-column>
-            <el-table-column prop="installationUnitPrice" label="单价" width="80">
+            <el-table-column prop="installationUnitPrice" label="单价" width="80" @change="calculateInstallation(scope.$index, scope.row)">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.installationUnitPrice"></el-input>
               </template>
@@ -443,13 +443,14 @@ export default {
     arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
     },
 
-    // 进入下个阶段
+    // ========================================= 进入下个阶段 ===================================== //
     moveToNext (index, data) {
       this.isNextTable = true
       this.getEnum()
       this.getLogoProject()
     },
 
+    // 获取各种枚举
     getEnum () {
       proxy.getAttributeEnum('applyPart').then(res => {
         this.applyPartEnums = res.data
@@ -464,9 +465,20 @@ export default {
         this.powerModelEnums = res.data
       })
     },
-
+    // 插入新行
     newTableRow (index) {
       this.logoProjectTable.splice(index + 1, 0, Object.assign({projectId: this.projectId}, initTableItem))
+    },
+    // 小计标识费
+    calculateLogo (index, row) {
+      // console.log(row.logoUnitPrice * row.logoCount)
+      row.logoCostSummary = row.logoUnitPrice * row.logoCount
+    },
+    calculatePower (index, row) {
+      row.powerCostSummary = row.powerUnitPrice * row.powerCount
+    },
+    calculateInstallation (index, row) {
+      row.installationCostSummary = row.installationUnitPrice
     },
     // 获取所有logo标志项目
     getLogoProject () {
