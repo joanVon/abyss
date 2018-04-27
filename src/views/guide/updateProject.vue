@@ -208,21 +208,27 @@
           </el-table-column>
           <el-table-column prop="wordThickness" label="字厚" width="80">
           </el-table-column>
-          <el-table-column prop="borderCraft" label="边框工艺" width="110">
+          <el-table-column prop="borderCraft" label="边框工艺">
           </el-table-column>
           <el-table-column label="LOGO标识费">
             <el-table-column prop="logoCount" label="数量" width="80">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.logoCount"></el-input>
+              </template>
             </el-table-column>
             <el-table-column label="单位" width="80">
             </el-table-column>
             <el-table-column prop="logoUnitPrice" label="单价" width="80">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.logoUnitPrice"></el-input>
+              </template>
             </el-table-column>
             <el-table-column prop="logoCostSummary" label="小计" width="80">
             </el-table-column>
           </el-table-column>
 
           <el-table-column label="电源费">
-            <el-table-column prop="powerModel" label="型号" width="150">
+            <el-table-column prop="powerModel" label="型号">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.powerModel">
                   <el-option v-for="powerModel in powerModelEnums" :key="powerModel.name" :label="powerModel.name" :value="powerModel.name"></el-option>
@@ -230,10 +236,16 @@
               </template>
             </el-table-column>
             <el-table-column prop="powerCount" label="数量" width="80">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.powerCount"></el-input>
+              </template>
             </el-table-column>
-            <el-table-column label="单位">
+            <el-table-column label="单位" width="80">
             </el-table-column>
             <el-table-column prop="powerUnitPrice" label="单价" width="80">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.powerUnitPrice"></el-input>
+              </template>
             </el-table-column>
             <el-table-column prop="powerCostSummary" label="小计" width="80">
             </el-table-column>
@@ -243,6 +255,9 @@
             <el-table-column label="单位" width="80">
             </el-table-column>
             <el-table-column prop="installationUnitPrice" label="单价" width="80">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.installationUnitPrice"></el-input>
+              </template>
             </el-table-column>
             <el-table-column prop="installationCostSummary" label="小计" width="80">
             </el-table-column>
