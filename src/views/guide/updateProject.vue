@@ -254,9 +254,9 @@
           <el-table-column label="安装费">
             <el-table-column label="单位" width="80">
             </el-table-column>
-            <el-table-column prop="installationUnitPrice" label="单价" width="80" @change="calculateInstallation(scope.$index, scope.row)">
+            <el-table-column prop="installationUnitPrice" label="单价" width="80">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.installationUnitPrice"></el-input>
+                <el-input v-model="scope.row.installationUnitPrice"  @change="calculateInstallation(scope.$index, scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="installationCostSummary" label="小计" width="80">
