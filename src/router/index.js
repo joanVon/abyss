@@ -6,8 +6,8 @@ import Login from '@/views/login/router'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  base: '',
+  mode: '',
+  base: '/dist',
   routes: [
     ...Guide, ...Login
   ]
