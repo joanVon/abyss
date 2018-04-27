@@ -265,7 +265,7 @@ import proxy from './proxy'
 
 const initTableItem = {
   'applyPart': '',
-  'borderCraft': '',
+  'borderCraft': '-',
   'fontName': '',
   'installationCostSummary': 0,
   'installationUnitPrice': 0,
@@ -451,14 +451,14 @@ export default {
     },
 
     newTableRow (index) {
-      this.logoProjectTable.splice(index + 1, 0, Object.assign({}, initTableItem))
+      this.logoProjectTable.splice(index + 1, 0, Object.assign({projectId: this.projectId}, initTableItem))
     },
     // 获取所有logo标志项目
     getLogoProject () {
       proxy.getAllLogoProject(this.projectId).then(res => {
         this.logoProjectTable = res.data
         if (!res.data || res.data.length === 0) {
-          this.logoProjectTable.push(Object.assign({}, initTableItem))
+          this.logoProjectTable.push(Object.assign({projectId: this.projectId}, initTableItem))
         } else {
           this.logoProjectTable = res.data
         }
@@ -474,6 +474,7 @@ export default {
           type: 'success'
         })
         this.isNextTable = false
+        this.getCostById()
       })
     },
     cancelLogoTable () {

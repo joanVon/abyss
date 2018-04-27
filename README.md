@@ -1,4 +1,4 @@
-# web-cms
+# erp-cms
 
 > A Vue.js project
 

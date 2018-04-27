@@ -41,6 +41,9 @@ http.interceptors.response.use(function (response) {
   })
 }, function (error) {
   // Response Error
+  Notification.error({
+    message: '系统错误'
+  })
   return Promise.reject(error)
 })
 
