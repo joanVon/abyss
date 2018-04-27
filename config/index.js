@@ -17,8 +17,8 @@ module.exports = {
       //   // 针对获取不到证书的问题
       //   secure: false
       // },
-      '/v1': {
-        target: 'http://39.104.168.156:8080/service',
+      '/service': {
+        target: 'http://39.104.168.156:8080',
         changeOrigin: true,
         // 针对获取不到证书的问题
         secure: false
