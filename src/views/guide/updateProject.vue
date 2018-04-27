@@ -179,8 +179,8 @@
         </el-table>
 
         <!-- 下一阶段表格 -->
-        <el-table :data="logoProjectTable" style="width: 100%" max-height="700px" :span-method="arraySpanMethod" sum-text="合计" show-summary v-show="isNextTable">
-          <el-table-column label="" width="56">
+        <el-table :data="logoProjectTable" style="width: 100%" border max-height="700px" :span-method="arraySpanMethod" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable">
+          <el-table-column label="#" width="56" align="center">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
             </template>
@@ -495,6 +495,11 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+
+</style>
+
 
 
 
