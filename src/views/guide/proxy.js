@@ -36,9 +36,18 @@ export default {
     // GET /v1/item/logo/projectId/{projectId}
     return http.get('/service/v1/item/logo/projectId/' + projectId)
   },
+  // 获取所有灯具类项目
+  getAllLampProject (projectId) {
+    // GET /v1/item/logo/projectId/{projectId}
+    return http.get('/service/v1/item/lamp/projectId/' + projectId)
+  },
 
   // 批量保存Logo标志造价表
   saveLogoProjects (data) {
     return http.post('/service/v1/item/logo', data)
+  },
+  // 批量保存灯具类
+  saveLampProjects (data) {
+    return http.post('/service/v1/item/lamp', data)
   }
 }

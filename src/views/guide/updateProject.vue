@@ -178,8 +178,8 @@
           </el-table-column>
         </el-table>
 
-        <!-- 下一阶段表格 -->
-        <el-table :data="logoProjectTable" style="width: 100%" border height="700px" :span-method="arraySpanMethod" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable">
+        <!-- LOGO造价 -->
+        <el-table :data="logoProjectTable" style="width: 100%" border height="700px" :span-method="arraySpanMethod" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable&&itemType===1">
           <el-table-column label="#" width="56" align="center">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
@@ -256,11 +256,70 @@
             </el-table-column>
             <el-table-column prop="installationUnitPrice" label="单价" width="80">
               <template slot-scope="scope">
-                <el-input v-model="scope.row.installationUnitPrice"  @change="calculateInstallation(scope.$index, scope.row)"></el-input>
+                <el-input v-model="scope.row.installationUnitPrice" @change="calculateInstallation(scope.$index, scope.row)"></el-input>
               </template>
             </el-table-column>
             <el-table-column prop="installationCostSummary" label="小计" width="80">
             </el-table-column>
+          </el-table-column>
+        </el-table>
+
+        <!-- 灯具类 -->
+        <el-table :data="logoProjectTable" style="width: 100%" border height="700px" :span-method="arraySpanMethod" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable&&itemType===2">
+          <el-table-column label="#" width="56" align="center">
+            <template slot-scope="scope">
+              <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="applyPart" label="应用部位ddd" width="150">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.applyPart">
+                <el-option v-for="apply in lampApplyPartEnums" :key="apply.name" :label="apply.name" :value="apply.name"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="response" label="责任" width="150">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.response">
+                <el-option v-for="response in responseEnums" :key="response.name" :label="response.name" :value="response.name"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="installMod" label="内外属性">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.installMod">
+                <el-option label="厂内安装" value="厂内安装"></el-option>
+                <el-option label="现场安装" value="现场安装"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="lampConfig" label="灯具类配置" width="180">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.lampConfig" :title="scope.row.lampConfig"  @change="sltedLampConfig($event, scope.$index, scope.row)">
+                <el-option v-for="lamp in lampConfigEnums" :key="lamp.id" :label="lamp.lampConfig" :value="lamp"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="brand" label="品牌">
+          </el-table-column>
+          <el-table-column prop="unit" label="单位" width="50">
+          </el-table-column>
+          <el-table-column prop="count" label="数量">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.count" @change="calculateLampSum(scope.$index, scope.row)"></el-input>
+            </template>
+          </el-table-column>
+          </el-table-column>
+          <el-table-column prop="electricityConsumption" label="用电量" width="80">
+          </el-table-column>
+          <el-table-column prop="unitPrice" label="单价" width="50">
+          </el-table-column>
+          <el-table-column prop="costSum" label="合计">
+            <template slot-scope="scope">
+              {{scope.row.unitPrice * scope.row.count}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="supplier" label="供应商">
           </el-table-column>
         </el-table>
 
@@ -294,6 +353,21 @@ const initTableItem = {
   'response': '',
   'wordThickness': 0
 }
+
+const initaLampTable = {
+  'applyPart': '',
+  'brand': '',
+  'costSum': 0,
+  'count': 2,
+  'electricityConsumption': 0,
+  'installMod': '',
+  'lampConfig': '',
+  'projectId': 0,
+  'response': '',
+  'supplier': '',
+  'unit': '',
+  'unitPrice': 0
+}
 export default {
   name: 'UpdateInfo',
   data () {
@@ -322,10 +396,40 @@ export default {
         total: 0
       },
       isNextTable: false,
+      itemType: null,  // 下一步操作的选中类型
       applyPartEnums: [],
       responseEnums: [],
       fontNameEnums: [],
       powerModelEnums: [],
+
+      // 灯具类
+      lampApplyPartEnums: [
+        {id: 0, name: '门头帽檐灯'},
+        {id: 1, name: '门头侧打光'},
+        {id: 2, name: '门头内打光'},
+        {id: 3, name: '门头背打光'},
+        {id: 4, name: '门头上打光'},
+        {id: 5, name: '门头下打光'},
+        {id: 6, name: '门头底部下打光'},
+        {id: 7, name: '门头底部侧打光'},
+        {id: 8, name: '门头底部内打光'},
+        {id: 9, name: '门柱侧打光'},
+        {id: 10, name: '门柱内打光'}
+      ],
+      lampConfigEnums: [
+        {id: 0, lampConfig: '5054硬条灯/2700K/72珠18W/黄光', brand: 'aaa', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 1, lampConfig: '5054硬条灯/4000K/72珠18W/中性光', brand: 'aaa1', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 2, lampConfig: '5054硬条灯/10000K/72珠18W/白光', brand: 'aaa2', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 3, lampConfig: '3030硬条灯/2700K/36珠18W/黄金专用', brand: 'aaa3', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 4, lampConfig: '2835硬条灯/4000K/120珠18W/彩金专用', brand: 'aaa4', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 5, lampConfig: '软条灯/2700K/60珠12W/黄光', brand: 'aaa5', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 6, lampConfig: '软条灯/4000K/60珠12W/中性光', brand: 'aaa6', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 7, lampConfig: '软条灯/10000K/60珠12W/白光', brand: 'aaa7', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 8, lampConfig: '防水软条灯/2700K/60珠12W/黄光', brand: 'aaa8', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 9, lampConfig: '防水软条灯/4000K/60珠12W/中性光', brand: 'aaa9', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
+        {id: 10, lampConfig: '防水软条灯/10000K/60珠12W/白光', brand: 'aaa0', unit: 'm', unitPrice: '9', supplier: 'ff照明'}
+      ],
+      curampConfig: {},
       logoProjectTable: []
     }
   },
@@ -446,10 +550,17 @@ export default {
     // ========================================= 进入下个阶段 ===================================== //
     moveToNext (index, data) {
       this.isNextTable = true
-      this.getEnum()
-      this.getLogoProject()
-    },
+      this.itemType = data.type
 
+      if (this.itemType === 1) {
+        this.getEnum()
+      } else if (this.itemType === 2) {
+        proxy.getAttributeEnum('response').then(res => {
+          this.responseEnums = res.data
+        })
+      }
+      this.getItemDetailProject()
+    },
     // 获取各种枚举
     getEnum () {
       proxy.getAttributeEnum('applyPart').then(res => {
@@ -465,9 +576,24 @@ export default {
         this.powerModelEnums = res.data
       })
     },
+    sltedLampConfig (slt, index, row) {
+      // console.log(slt)
+
+      this.curampConfig = slt
+      row.lampConfig = slt.lampConfig
+      // Object.assign(row, slt)
+      // this.calculateLampSum(index, row)
+      console.log(row)
+      // row.lampConfig = this.curampConfig.lampConfig
+    },
     // 插入新行
     newTableRow (index) {
-      this.logoProjectTable.splice(index + 1, 0, Object.assign({projectId: this.projectId}, initTableItem))
+      console.log(this.itemType)
+      if (this.itemType === 1) {
+        this.logoProjectTable.splice(index + 1, 0, Object.assign({ projectId: this.projectId }, initTableItem))
+      } else if (this.itemType === 2) {
+        this.logoProjectTable.splice(index + 1, 0, Object.assign({ projectId: this.projectId }, initaLampTable))
+      }
     },
     // 小计标识费
     calculateLogo (index, row) {
@@ -480,16 +606,38 @@ export default {
     calculateInstallation (index, row) {
       row.installationCostSummary = row.installationUnitPrice
     },
+    // 合计灯具报价
+    calculateLampSum (index, row) {
+      row.costSum = row.unitPrice * row.count
+    },
     // 获取所有logo标志项目
-    getLogoProject () {
-      proxy.getAllLogoProject(this.projectId).then(res => {
-        this.logoProjectTable = res.data
-        if (!res.data || res.data.length === 0) {
-          this.logoProjectTable.push(Object.assign({projectId: this.projectId}, initTableItem))
-        } else {
-          this.logoProjectTable = res.data
-        }
-      })
+    getItemDetailProject () {
+      switch (this.itemType) {
+        case 1:
+          proxy.getAllLogoProject(this.projectId).then(res => {
+            this.logoProjectTable = res.data
+            if (!res.data || res.data.length === 0) {
+              this.logoProjectTable.push(Object.assign({ projectId: this.projectId }, initTableItem))
+            } else {
+              this.logoProjectTable = res.data
+            }
+          })
+          break
+
+        case 2:
+          proxy.getAllLampProject(this.projectId).then(res => {
+            this.logoProjectTable = res.data
+            if (!res.data || res.data.length === 0) {
+              this.logoProjectTable.push(Object.assign({ projectId: this.projectId }, initaLampTable))
+            } else {
+              this.logoProjectTable = res.data
+            }
+          })
+          break
+
+        default:
+          break
+      }
     },
 
     // 保存LOGO子集表
