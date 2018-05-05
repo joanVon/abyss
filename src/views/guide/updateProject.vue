@@ -1,18 +1,12 @@
 <template>
   <div class="page-content update-project">
-    <el-button class="page-back" icon="el-icon-arrow-left" circle @click="pageBack" size="small"></el-button>
+    <el-tooltip class="item" effect="dark" content="返回工程信息概览" placement="bottom-end">
+      <el-button class="page-back" icon="el-icon-arrow-left" circle @click="pageBack" size="small"></el-button>
+    </el-tooltip>
+    
     <el-tabs v-model="activeName" @tab-click="tabClick">
       <el-tab-pane label="工程信息" name="0">
         <el-form ref="infoForm" :model="form" label-width="200px" style="padding-bottom: 12px;">
-          <!-- <el-row type="flex" class="row-bg" justify="center">
-            <el-col :span="8">
-              <el-form-item label="品牌名称" :rules="[{ required: true, message: '请输入品牌名称', trigger: 'blur' }]">
-                <el-input placeholder="请输入内容" v-model="form.brandName">
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8"></el-col>
-          </el-row> -->
           <el-row type="flex" class="row-bg" justify="center">
             <el-col :span="8">
               <el-form-item label="工程名称" :rules="[{ required: true, message: '请输入工程名称', trigger: 'blur' }]">
@@ -265,11 +259,11 @@
         </el-table>
 
         <!-- 灯具类 -->
-        <el-radio-group v-model="lampStyle" v-show="isNextTable&&itemType===2">
+        <el-radio-group class="lamp-style-radio" v-model="lampStyle" v-show="isNextTable&&itemType===2">
           <el-radio :label="0">报价部</el-radio>
           <el-radio :label="1">设计部</el-radio>
         </el-radio-group>
-        <el-table ref="lampTable" :data="logoProjectTable" style="width: 100%" border height="600px" header-row-class-name="table-header-center" v-show="isNextTable&&itemType===2">
+        <el-table ref="lampTable" :data="logoProjectTable" style="width: 100%" border height="600px" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable&&itemType===2">
           <el-table-column label="#" width="56" align="center">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
@@ -282,14 +276,14 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="response" label="责任" width="120">
+          <el-table-column prop="response" label="责任" width="150">
             <template slot-scope="scope">
               <el-select v-model="scope.row.response">
                 <el-option v-for="response in responseEnums" :key="response.name" :label="response.name" :value="response.name"></el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="installMod" label="内外属性">
+          <el-table-column prop="installMod" label="内外属性" width="150">
             <template slot-scope="scope">
               <el-select v-model="scope.row.installMod">
                 <el-option label="厂内安装" value="厂内安装"></el-option>
@@ -297,7 +291,7 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="lampConfig" label="灯具类配置" width="180">
+          <el-table-column prop="lampConfig" label="灯具类配置" width="200">
             <template slot-scope="scope">
               <el-select v-model="scope.row.lampConfig" value-key="name" :title="scope.row.lampConfig" @change="sltedLampConfig($event, scope.$index, scope.row)">
                 <el-option v-for="lamp in lampConfigEnums" :key="lamp.name" :label="lamp.name" :value="lamp"></el-option>
@@ -308,7 +302,7 @@
           </el-table-column>
           <el-table-column prop="unit" label="单位" width="50" v-if="lampStyle===0">
           </el-table-column>
-          <el-table-column prop="count" label="数量" v-if="lampStyle===0">
+          <el-table-column prop="count" label="数量" width="80" v-if="lampStyle===0">
             <template slot-scope="scope">
               <el-input v-model="scope.row.count" @change="calculateLampSum(scope.$index, scope.row)"></el-input>
             </template>
@@ -596,7 +590,7 @@ export default {
     },
     // 插入新行
     newTableRow (index) {
-      console.log(this.itemType)
+      // console.log(this.itemType)
       if (this.itemType === 1) {
         this.logoProjectTable.splice(index + 1, 0, Object.assign({ projectId: this.projectId }, initTableItem))
       } else if (this.itemType === 2) {
@@ -679,7 +673,7 @@ export default {
       }
     },
     cancelLogoTable () {
-      this.$confirm('确认离开此页操作？', '提示', {
+      this.$confirm('确认离开当前操作页？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
