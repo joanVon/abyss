@@ -266,8 +266,8 @@
 
         <!-- 灯具类 -->
         <el-radio-group v-model="lampStyle" v-show="isNextTable&&itemType===2">
-          <el-radio :label="0">选择1</el-radio>
-          <el-radio :label="1">选择2</el-radio>
+          <el-radio :label="0">报价部</el-radio>
+          <el-radio :label="1">设计部</el-radio>
         </el-radio-group>
         <el-table ref="lampTable" :data="logoProjectTable" style="width: 100%" border height="600px" header-row-class-name="table-header-center" v-show="isNextTable&&itemType===2">
           <el-table-column label="#" width="56" align="center">
@@ -306,19 +306,19 @@
           </el-table-column>
           <el-table-column prop="brand" label="品牌">
           </el-table-column>
-          <el-table-column prop="unit" label="单位" width="50">
+          <el-table-column prop="unit" label="单位" width="50" v-if="lampStyle===0">
           </el-table-column>
-          <el-table-column prop="count" label="数量">
+          <el-table-column prop="count" label="数量" v-if="lampStyle===0">
             <template slot-scope="scope">
               <el-input v-model="scope.row.count" @change="calculateLampSum(scope.$index, scope.row)"></el-input>
             </template>
           </el-table-column>
           </el-table-column>
-          <el-table-column prop="electricityConsumption" label="用电量(W)" width="100">
+          <el-table-column prop="electricityConsumption" label="用电量(W)" width="100" v-if="lampStyle===0">
           </el-table-column>
-          <el-table-column prop="unitPrice" label="单价(元)" width="80">
+          <el-table-column prop="unitPrice" label="单价(元)" width="80" v-if="lampStyle===0">
           </el-table-column>
-          <el-table-column prop="costSum" label="合计" width="60">
+          <el-table-column prop="costSum" label="合计" width="60" v-if="lampStyle===0">
             <template slot-scope="scope">
               {{scope.row.unitPrice * scope.row.count}}
             </template>
@@ -453,33 +453,7 @@ export default {
         this.getCostById()
       }
     },
-    lampStyle (nLampSt) {
-      console.log(nLampSt)
-      let tableColumns = this.$refs.lampTable.columns
-      if (nLampSt === 1) {
-        tableColumns.forEach(col => {
-          let columnClass = document.getElementsByClassName(col.id)
-          if (col.property === 'brand' || col.property === 'count' || col.property === 'unit' ||
-         col.property === 'unitPrice' || col.property === 'electricityConsumption' || col.property === 'costSum') {
-            for (let idx = 0; idx < columnClass.length; idx++) {
-              let ccls = columnClass[idx]
-              ccls.style.display = 'none'
-            }
-          }
-        })
-      } else {
-        tableColumns.forEach(col => {
-          let columnClass = document.getElementsByClassName(col.id)
-          if (col.property === 'brand' || col.property === 'count' || col.property === 'unit' ||
-         col.property === 'unitPrice' || col.property === 'electricityConsumption' || col.property === 'costSum') {
-            for (let idx = 0; idx < columnClass.length; idx++) {
-              let ccls = columnClass[idx]
-              ccls.style.display = 'table-cell'
-            }
-          }
-        })
-      }
-    }
+    lampStyle (nLampSt) {}
   },
   methods: {
     pageBack () {
@@ -616,7 +590,8 @@ export default {
       row.unit = this.curampConfig.unit
       row.unitPrice = this.curampConfig.unitPrice
       row.supplier = this.curampConfig.supplier
-      console.log(row)
+      row.projectId = this.projectId
+      // console.log(row)
       this.calculateLampSum(index, row)
     },
     // 插入新行
@@ -660,6 +635,7 @@ export default {
         case 2:
           proxy.getAllLampProject(this.projectId).then(res => {
             this.logoProjectTable = res.data
+
             if (!res.data || res.data.length === 0) {
               this.logoProjectTable.push(Object.assign({ projectId: this.projectId }, initaLampTable))
             } else {
@@ -675,7 +651,7 @@ export default {
 
     // 保存LOGO子集表
     submitTable () {
-      console.log(this.logoProjectTable)
+      // console.log(this.logoProjectTable)
       switch (this.itemType) {
         case 1:
           proxy.saveLogoProjects(this.logoProjectTable).then(res => {
