@@ -179,7 +179,7 @@
         </el-table>
 
         <!-- LOGO造价 -->
-        <el-table :data="logoProjectTable" style="width: 100%" border height="700px" :span-method="arraySpanMethod" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable&&itemType===1">
+        <el-table :data="logoProjectTable" style="width: 100%" border height="500px" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable&&itemType===1">
           <el-table-column label="#" width="56" align="center">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
@@ -265,20 +265,24 @@
         </el-table>
 
         <!-- 灯具类 -->
-        <el-table :data="logoProjectTable" style="width: 100%" border height="700px" :span-method="arraySpanMethod" header-row-class-name="table-header-center" sum-text="合计" show-summary v-show="isNextTable&&itemType===2">
+        <el-radio-group v-model="lampStyle" v-show="isNextTable&&itemType===2">
+          <el-radio :label="0">选择1</el-radio>
+          <el-radio :label="1">选择2</el-radio>
+        </el-radio-group>
+        <el-table ref="lampTable" :data="logoProjectTable" style="width: 100%" border height="600px" header-row-class-name="table-header-center" v-show="isNextTable&&itemType===2">
           <el-table-column label="#" width="56" align="center">
             <template slot-scope="scope">
               <el-button type="text" icon="el-icon-plus" @click="newTableRow(scope.$index)"></el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="applyPart" label="应用部位ddd" width="150">
+          <el-table-column prop="applyPart" label="应用部位" width="150">
             <template slot-scope="scope">
               <el-select v-model="scope.row.applyPart">
                 <el-option v-for="apply in lampApplyPartEnums" :key="apply.name" :label="apply.name" :value="apply.name"></el-option>
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="response" label="责任" width="150">
+          <el-table-column prop="response" label="责任" width="120">
             <template slot-scope="scope">
               <el-select v-model="scope.row.response">
                 <el-option v-for="response in responseEnums" :key="response.name" :label="response.name" :value="response.name"></el-option>
@@ -295,8 +299,8 @@
           </el-table-column>
           <el-table-column prop="lampConfig" label="灯具类配置" width="180">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.lampConfig" :title="scope.row.lampConfig"  @change="sltedLampConfig($event, scope.$index, scope.row)">
-                <el-option v-for="lamp in lampConfigEnums" :key="lamp.id" :label="lamp.lampConfig" :value="lamp"></el-option>
+              <el-select v-model="scope.row.lampConfig" value-key="name" :title="scope.row.lampConfig" @change="sltedLampConfig($event, scope.$index, scope.row)">
+                <el-option v-for="lamp in lampConfigEnums" :key="lamp.name" :label="lamp.name" :value="lamp"></el-option>
               </el-select>
             </template>
           </el-table-column>
@@ -310,11 +314,11 @@
             </template>
           </el-table-column>
           </el-table-column>
-          <el-table-column prop="electricityConsumption" label="用电量" width="80">
+          <el-table-column prop="electricityConsumption" label="用电量(W)" width="100">
           </el-table-column>
-          <el-table-column prop="unitPrice" label="单价" width="50">
+          <el-table-column prop="unitPrice" label="单价(元)" width="80">
           </el-table-column>
-          <el-table-column prop="costSum" label="合计">
+          <el-table-column prop="costSum" label="合计" width="60">
             <template slot-scope="scope">
               {{scope.row.unitPrice * scope.row.count}}
             </template>
@@ -358,7 +362,7 @@ const initaLampTable = {
   'applyPart': '',
   'brand': '',
   'costSum': 0,
-  'count': 2,
+  'count': 1,
   'electricityConsumption': 0,
   'installMod': '',
   'lampConfig': '',
@@ -403,31 +407,32 @@ export default {
       powerModelEnums: [],
 
       // 灯具类
+      lampStyle: 0,
       lampApplyPartEnums: [
-        {id: 0, name: '门头帽檐灯'},
-        {id: 1, name: '门头侧打光'},
-        {id: 2, name: '门头内打光'},
-        {id: 3, name: '门头背打光'},
-        {id: 4, name: '门头上打光'},
-        {id: 5, name: '门头下打光'},
-        {id: 6, name: '门头底部下打光'},
-        {id: 7, name: '门头底部侧打光'},
-        {id: 8, name: '门头底部内打光'},
-        {id: 9, name: '门柱侧打光'},
-        {id: 10, name: '门柱内打光'}
+        { id: 0, name: '门头帽檐灯' },
+        { id: 1, name: '门头侧打光' },
+        { id: 2, name: '门头内打光' },
+        { id: 3, name: '门头背打光' },
+        { id: 4, name: '门头上打光' },
+        { id: 5, name: '门头下打光' },
+        { id: 6, name: '门头底部下打光' },
+        { id: 7, name: '门头底部侧打光' },
+        { id: 8, name: '门头底部内打光' },
+        { id: 9, name: '门柱侧打光' },
+        { id: 10, name: '门柱内打光' }
       ],
       lampConfigEnums: [
-        {id: 0, lampConfig: '5054硬条灯/2700K/72珠18W/黄光', brand: 'aaa', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 1, lampConfig: '5054硬条灯/4000K/72珠18W/中性光', brand: 'aaa1', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 2, lampConfig: '5054硬条灯/10000K/72珠18W/白光', brand: 'aaa2', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 3, lampConfig: '3030硬条灯/2700K/36珠18W/黄金专用', brand: 'aaa3', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 4, lampConfig: '2835硬条灯/4000K/120珠18W/彩金专用', brand: 'aaa4', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 5, lampConfig: '软条灯/2700K/60珠12W/黄光', brand: 'aaa5', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 6, lampConfig: '软条灯/4000K/60珠12W/中性光', brand: 'aaa6', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 7, lampConfig: '软条灯/10000K/60珠12W/白光', brand: 'aaa7', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 8, lampConfig: '防水软条灯/2700K/60珠12W/黄光', brand: 'aaa8', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 9, lampConfig: '防水软条灯/4000K/60珠12W/中性光', brand: 'aaa9', unit: 'm', unitPrice: '9', supplier: 'ff照明'},
-        {id: 10, lampConfig: '防水软条灯/10000K/60珠12W/白光', brand: 'aaa0', unit: 'm', unitPrice: '9', supplier: 'ff照明'}
+        { name: '5054硬条灯/2700K/72珠18W/黄光', brand: '晶元', unit: '米', unitPrice: '60', supplier: '嘉拓照明' },
+        { name: '5054硬条灯/4000K/72珠18W/中性光', brand: '台湾光威', unit: '套', unitPrice: '180', supplier: '嘉拓照明' },
+        { name: '5054硬条灯/10000K/72珠18W/白光', brand: '晶元', unit: '米', unitPrice: '60', supplier: '嘉拓照明' },
+        { name: '3030硬条灯/2700K/36珠18W/黄金专用', brand: '三安光电', unit: '米', unitPrice: '45', supplier: '依悠科技' },
+        { name: '2835硬条灯/4000K/120珠18W/彩金专用', brand: 'OSR', unit: '套', unitPrice: '300', supplier: '嘉拓照明' },
+        { name: '软条灯/2700K/60珠12W/黄光', brand: '三安光电', unit: '米', unitPrice: '45', supplier: '依悠科技' },
+        { name: '软条灯/4000K/60珠12W/中性光', brand: 'OSR', unit: '套', unitPrice: '300', supplier: '嘉拓照明' },
+        { name: '软条灯/10000K/60珠12W/白光', brand: '三安光电', unit: '米', unitPrice: '45', supplier: '依悠科技' },
+        { name: '防水软条灯/2700K/60珠12W/黄光', brand: 'OSR', unit: '套', unitPrice: '300', supplier: '嘉拓照明' },
+        { name: '防水软条灯/4000K/60珠12W/中性光', brand: '台湾光威', unit: '套', unitPrice: '180', supplier: '嘉拓照明' },
+        { name: '防水软条灯/10000K/60珠12W/白光', brand: '晶元', unit: '米', unitPrice: '60', supplier: '嘉拓照明' }
       ],
       curampConfig: {},
       logoProjectTable: []
@@ -446,6 +451,33 @@ export default {
     activeName (nActive) {
       if (nActive === '1') {
         this.getCostById()
+      }
+    },
+    lampStyle (nLampSt) {
+      console.log(nLampSt)
+      let tableColumns = this.$refs.lampTable.columns
+      if (nLampSt === 1) {
+        tableColumns.forEach(col => {
+          let columnClass = document.getElementsByClassName(col.id)
+          if (col.property === 'brand' || col.property === 'count' || col.property === 'unit' ||
+         col.property === 'unitPrice' || col.property === 'electricityConsumption' || col.property === 'costSum') {
+            for (let idx = 0; idx < columnClass.length; idx++) {
+              let ccls = columnClass[idx]
+              ccls.style.display = 'none'
+            }
+          }
+        })
+      } else {
+        tableColumns.forEach(col => {
+          let columnClass = document.getElementsByClassName(col.id)
+          if (col.property === 'brand' || col.property === 'count' || col.property === 'unit' ||
+         col.property === 'unitPrice' || col.property === 'electricityConsumption' || col.property === 'costSum') {
+            for (let idx = 0; idx < columnClass.length; idx++) {
+              let ccls = columnClass[idx]
+              ccls.style.display = 'table-cell'
+            }
+          }
+        })
       }
     }
   },
@@ -543,10 +575,6 @@ export default {
 
       return sums
     },
-
-    arraySpanMethod ({ row, column, rowIndex, columnIndex }) {
-    },
-
     // ========================================= 进入下个阶段 ===================================== //
     moveToNext (index, data) {
       this.isNextTable = true
@@ -576,15 +604,20 @@ export default {
         this.powerModelEnums = res.data
       })
     },
+    // 联动灯具配置
     sltedLampConfig (slt, index, row) {
       // console.log(slt)
-
+      // let rowKeys = Object.keys(row)
       this.curampConfig = slt
-      row.lampConfig = slt.lampConfig
-      // Object.assign(row, slt)
-      // this.calculateLampSum(index, row)
+      // row = _.pick(Object.assign(this.curampConfig, row), rowKeys)
+      // { name: '防水软条灯/4000K/60珠12W/中性光', brand: 'aaa9', unit: 'm', unitPrice: '9', supplier: 'ff照明' },
+      row.lampConfig = this.curampConfig.name
+      row.brand = this.curampConfig.brand
+      row.unit = this.curampConfig.unit
+      row.unitPrice = this.curampConfig.unitPrice
+      row.supplier = this.curampConfig.supplier
       console.log(row)
-      // row.lampConfig = this.curampConfig.lampConfig
+      this.calculateLampSum(index, row)
     },
     // 插入新行
     newTableRow (index) {
@@ -642,15 +675,32 @@ export default {
 
     // 保存LOGO子集表
     submitTable () {
-      // console.log(this.logoProjectTable)
-      proxy.saveLogoProjects(this.logoProjectTable).then(res => {
-        this.$message({
-          message: 'LOGO标志信息保存成功',
-          type: 'success'
-        })
-        this.isNextTable = false
-        this.getCostById()
-      })
+      console.log(this.logoProjectTable)
+      switch (this.itemType) {
+        case 1:
+          proxy.saveLogoProjects(this.logoProjectTable).then(res => {
+            this.$message({
+              message: 'LOGO标志信息保存成功',
+              type: 'success'
+            })
+            this.isNextTable = false
+            this.getCostById()
+          })
+          break
+        case 2:
+          proxy.saveLampProjects(this.logoProjectTable).then(res => {
+            this.$message({
+              message: '灯具类造价信息保存成功',
+              type: 'success'
+            })
+            this.isNextTable = false
+            this.getCostById()
+          })
+          break
+
+        default:
+          break
+      }
     },
     cancelLogoTable () {
       this.$confirm('确认离开此页操作？', '提示', {
