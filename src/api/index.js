@@ -1,6 +1,7 @@
 import axios from 'axios'
-import i18n from '@/i18n'
-import { Notification } from 'element-ui'
+// import i18n from '@/i18n'
+import {Notification} from 'element-ui'
+// import {  } from 'element-ui'
 
 const http = axios.create({
   timeout: 10000,
@@ -10,12 +11,14 @@ const http = axios.create({
 
 // 添加响应拦截器
 http.interceptors.request.use(function (config) {
-  // 配置发送请求的信息
-  // 在发送请求之前做某事
+  config.mask = false
   config.url += '?t=' + Date.now()
+
+  // if (config.mask) {
+  //   Loading.service({ fullscreen: true })
+  // }
   return config
 }, function (error) {
-  // 请求错误时做些事
   return Promise.reject(error)
 })
 
@@ -25,15 +28,19 @@ http.interceptors.response.use(function (response) {
   if (response.data.ret * 1 !== 0) {
     if (response.data.msg) {
       Notification.error({
-        message: i18n.t(response.data.msg)
+        message: response.data.msg
       })
     } else {
       Notification.error({
-        message: '系统错误'
+        message: '请求返回异常'
       })
     }
     return Promise.reject(response.data.ret)
   }
+
+  // setTimeout(() => {
+  //   Loading.service().close()
+  // }, 3000)
 
   return Promise.resolve({
     message: response.data.msg,
