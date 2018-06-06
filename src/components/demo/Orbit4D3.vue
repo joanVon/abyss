@@ -11,7 +11,7 @@ export default {
     width: { type: Number, default: 0 },
     height: { type: Number, default: 0 },
 
-    zoom: { type: Boolean, default: false },  // 缩放
+    isZoom: { type: Boolean, default: false },  // 缩放
     isDrag: { type: Boolean, default: true },  // 拖拽
 
     dataPoints: { type: Array, default: [] },
@@ -44,6 +44,7 @@ export default {
       }
     },
 
+    // 拖拽
     dragstarted (d) {
       d3.event.sourceEvent.stopPropagation()
       d3.select(this).classed('dragging', true)
