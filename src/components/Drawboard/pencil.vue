@@ -73,7 +73,7 @@ export default {
 
     // 开始拖拽 画笔状态改为涂鸦绘制 path
     var dragstarted = () => {
-      const lineConfig = this.lineConfig
+      const lineConfig = LINE_CONFIG
       const line = d3.line().curve(d3.curveBasis)
       var d = d3.event.subject
 
@@ -214,6 +214,11 @@ export default {
           break
         case 'clear':
           d3.selectAll('path').remove()
+          this.draw = false
+          this.svg.attr('style', 'cursor: move')
+          d3.select('svg>g').attr('transform', 'translate(0, 0)scale(1)')
+          this.drag.subject(this.dragsubject)
+          .on('drag', this.dragged)
           break
         case 'save':
           if (d3.selectAll('path.selected')._groups[0] && d3.selectAll('path.selected')._groups[0].length > 0) {
@@ -292,7 +297,7 @@ export default {
     width: 100%;
     height: 40px;
     line-height: 40px;
-    background-color: rgba(102, 102, 102, 0.7);
+    background-color: rgba(51, 51, 51, 0.7);
     span {
       color: #fff;
       display: inline-block;
