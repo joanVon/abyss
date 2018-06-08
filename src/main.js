@@ -6,7 +6,6 @@ import Vuex from 'vuex'
 
 import Element from 'element-ui'
 import i18n from './i18n'
-// import * as d3 from 'd3'
 
 import 'normalize.css'
 import './assets/style/element-variables.scss'
@@ -23,7 +22,6 @@ Vue.config.productionTip = false
 Vue.prototype.router = router
 Vue.use(Vuex)
 Vue.use(Element)
-// Vue.use(d3)
 
 /* eslint-disable no-new */
 new Vue({
