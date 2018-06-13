@@ -3,14 +3,11 @@
     <transition name="fade">
       <p class="drawboard-alert" v-show="isAlert"></p>
     </transition>
-    
+
     <svg :width="width" :height="height"></svg>
 
     <div class="drawboard-toolbar">
-      <span v-for="(control, $index) in controlLayout" :key="$index" 
-      class="toolbar-opt"
-      :class="optActive === $index ? control.type + ' active' : control.type"
-      :title="control.name" @click="handleControl(control, $index)">
+      <span v-for="(control, $index) in controlLayout" :key="$index" class="toolbar-opt" :class="optActive === $index ? control.type + ' active' : control.type" :title="control.name" @click="handleControl(control, $index)">
         <i v-if="!control.icon">{{control.name}}</i>
         <i v-else class="icon-tool" :class="control.icon"></i>
       </span>
@@ -43,6 +40,7 @@ export default {
         return [
           { type: 'drag', name: '拖拽', icon: '' },
           { type: 'pencil', name: '画笔', icon: '' },
+          // { type: 'polygon', name: '多边形', icon: '' },
           { type: 'remove', name: '删除', icon: '' },
           { type: 'clear', name: '清空', icon: '' },
           { type: 'save', name: '保存', icon: '' }
@@ -113,12 +111,12 @@ export default {
             .on('click', function (d) {
               if (d3.select(this).classed('selected')) {
                 d3.select(this)
-                    .attr('class', '')
-                    .style('stroke', lineConfig.stroke)
+                  .attr('class', '')
+                  .style('stroke', lineConfig.stroke)
               } else {
                 d3.select(this)
-                    .attr('class', 'selected')
-                    .style('stroke', lineConfig.selected)
+                  .attr('class', 'selected')
+                  .style('stroke', lineConfig.selected)
               }
             })
         })
@@ -140,12 +138,17 @@ export default {
 
       draw: false,
       svgDrag: true,
+      polygon: false,
+
+      count: 0,
+      points: [],
+      // selected: this.points.length ? this.points[0] : null,
 
       svg: null,
       container: null,
 
-      zoom: d3.zoom().scaleExtent([1, 10]).on('zoom', zoomed),
-      drag: d3.drag().subject(dragsubject).on('drag', dragged),
+      zoom: d3.zoom().scaleExtent([1, 10]).on('zoom', zoomed),  // 缩放范围 1~10 倍
+      drag: d3.drag().subject(dragsubject).on('drag', dragged),  // 拖拽绑定
 
       transform: d3.zoomIdentity,
       dragged: dragged,
@@ -170,8 +173,62 @@ export default {
         .attr('width', this.width)
         .attr('height', this.height)
 
+      this.svg.append('polygon')
+        .attr('class', 'polygon-line')
+        .style('fill', this.lineConfig.fill)
+        .style('stroke', this.lineConfig.stroke)
+        .style('stroke-width', this.lineConfig.width)
+        .attr('id', 'polygon_' + this.count)
+
       this.svg.call(this.drag)
-      this.svg.call(this.zoom)
+      this.svg.call(this.zoom).on('dblclick.zoom', null)
+    },
+
+    drawPolygon () {
+      let lineConfig = this.lineConfig
+      d3.select('svg>g').append('polygon')
+        .attr('class', 'polygon-line')
+        .style('fill', lineConfig.fill)
+        .style('stroke', lineConfig.stroke)
+        .style('stroke-width', lineConfig.width)
+        .attr('id', 'polygon_' + this.count)
+    },
+
+    drawRestart () {
+      let circle = this.svg.selectAll('circle')
+        .data(this.points, function (d) { return d })
+
+      circle.enter().append('circle')
+        .transition()
+        .attr('r', this.lineConfig.width)
+        .attr('fill', this.lineConfig.fill)
+
+      circle
+        .classed('selected', function (d) { return d })
+        .attr('cx', function (d) { return d[0] })
+        .attr('cy', function (d) { return d[1] })
+
+      // circle.exit().remove()
+
+      if (d3.event) {
+        d3.event.preventDefault()
+        d3.event.stopPropagation()
+      }
+    },
+
+    mousedown () {
+      this.points.push(d3.mouse(this.svg.node()))
+      d3.select('svg #polygon_' + this.count)
+        .attr('points', this.points + ' ')
+      // this.drawRestart()
+    },
+
+    dblclick () {
+      this.count = this.count + 1
+      this.points = []
+      this.drawPolygon()
+
+      // this.svg.selectAll('circle').remove()
     },
 
     // 操作
@@ -183,24 +240,36 @@ export default {
         case 'pencil':
           this.draw = true
           this.dragged = null
+          this.polygon = false
           this.svg.attr('style', 'cursor: crosshair')
 
           this.drag.subject(function () { var p = [transform.invertX(d3.event.x), transform.invertY(d3.event.y)]; return [p, p] })
             .on('start', dragstarted)
           break
 
+        // case 'polygon':
+        //   this.polygon = true
+        //   this.dragged = null
+        //   this.svg.attr('style', 'cursor: crosshair')
+        //   if (this.polygon) {
+        //     this.svg
+        //       .on('click', this.mousedown)
+        //       .on('dblclick', this.dblclick)
+        //   }
+
+        //   break
         case 'drag':
           this.svg.attr('style', 'cursor: move')
           this.draw = false
           this.drag.subject(this.dragsubject)
-          .on('drag', this.dragged)
+            .on('drag', this.dragged)
           break
 
         case 'remove':
           this.svg.attr('style', 'cursor: pointer')
           this.draw = false
           this.drag.subject(this.dragsubject)
-          .on('drag', this.dragged)
+            .on('drag', this.dragged)
           if (d3.selectAll('path.selected')._groups[0] && d3.selectAll('path.selected')._groups[0].length > 0) {  // 选中 path 判断
             d3.selectAll('path.selected').remove()
           } else {
@@ -218,9 +287,12 @@ export default {
           this.svg.attr('style', 'cursor: move')
           d3.select('svg>g').attr('transform', 'translate(0, 0)scale(1)')
           this.drag.subject(this.dragsubject)
-          .on('drag', this.dragged)
+            .on('drag', this.dragged)
           break
         case 'save':
+          // const that = this
+          const expImg = {}
+
           if (d3.selectAll('path.selected')._groups[0] && d3.selectAll('path.selected')._groups[0].length > 0) {
             document.querySelector('.drawboard-alert').innerHTML = '尚有选中轨迹未处理，请先处理'
             this.isAlert = true
@@ -230,11 +302,36 @@ export default {
             return
           }
           d3.select('svg>g').attr('transform', 'translate(0, 0)scale(1)')
-          let svgXML = '<?xml version="1.0" standalone="no"?>\r\n' + new XMLSerializer().serializeToString(document.getElementsByTagName('svg')[0])
-          let encodedData = window.btoa(svgXML)
 
-          let svgDataUri = 'data:image/svg+xml;base64,' + encodedData
-          this.$emit('saveAsDataURI', svgDataUri)
+          // let svgHTML = d3.select('svg')
+          //       .attr('version', 1.1)
+          //       .attr('xmlns', 'http://www.w3.org/2000/svg')
+          //       .node().outerHTML
+
+          let svgXML = '<?xml version="1.0" standalone="no"?>\r\n' + new XMLSerializer().serializeToString(document.getElementsByTagName('svg')[0])
+          // let encodedData = window.btoa(svgXML)
+          // expImg.svgDataUri = 'data:image/svg+xml;base64,' + encodedData
+
+          const img = new Image()
+          // 给图片对象写入base64编码的svg流
+          // https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/btoa,btoa方法说明
+          // image/svg+xml
+          img.src = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXML)))
+
+          expImg.svgDataUri = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXML)))
+
+          const canvas = document.createElement('canvas')
+          const context = canvas.getContext('2d')
+
+          img.onload = () => {
+            canvas.width = this.width
+            canvas.height = this.height
+            context.drawImage(img, 0, 0, this.width, this.height)
+            img.src = canvas.toDataURL('image/png')
+            expImg.pngUri = img.src
+            this.$emit('saveAsDataURI', expImg)
+          }
+
           break
       }
       this.optActive = index
@@ -267,7 +364,7 @@ export default {
     text-align: center;
     transform: translateX(-50%);
     align-items: center;
-    transition: opacity .5s,transform .6s;
+    transition: opacity 0.5s, transform 0.6s;
     box-shadow: 1px 1px #fdf6ec;
   }
 

@@ -7,6 +7,8 @@
     <div class="print-img">
       <img ref="printImage" :src="printSrc" alt="">
     </div>
+
+    <div ref="svgContent"></div>
   </div>
 </template>
 
@@ -19,6 +21,7 @@ export default {
     return {
       controlLayout: [
         { type: 'drag', name: '拖拽', icon: 'el-icon-rank' },
+        // { type: 'polygon', name: '多边形', icon: '' },
         { type: 'pencil', name: '画笔', icon: 'el-icon-edit' },
         { type: 'remove', name: '删除', icon: 'el-icon-close' },
         { type: 'clear', name: '清空', icon: 'el-icon-delete' },
@@ -30,8 +33,10 @@ export default {
     }
   },
   methods: {
-    printImage (svgUri) {
-      this.printSrc = svgUri
+    printImage (expImg) {
+      this.printSrc = expImg.pngUri
+
+      // this.$refs.svgContent
     }
   }
 }
