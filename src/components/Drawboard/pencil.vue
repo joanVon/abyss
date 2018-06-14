@@ -316,9 +316,10 @@ export default {
           // 给图片对象写入base64编码的svg流
           // https://developer.mozilla.org/zh-CN/docs/Web/API/WindowBase64/btoa,btoa方法说明
           // image/svg+xml
-          img.src = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXML)))
+          // img.src = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXML)))
 
           expImg.svgDataUri = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgXML)))
+          img.src = expImg.svgDataUri
 
           const canvas = document.createElement('canvas')
           const context = canvas.getContext('2d')
