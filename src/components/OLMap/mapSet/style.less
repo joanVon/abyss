@@ -1,0 +1,68 @@
+.map-set-container {
+  position: relative;
+  height: inherit;
+}
+.map-upload-content {
+  text-align: center;
+  width: 750px;
+  height: 418px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  margin-top: -209px;
+  left: 50%;
+  margin-left: -375px;
+  
+  .auto-pic {
+    // position: relative;
+    width: auto;
+    height: 100%;
+    box-shadow: 1px 1px 1px 1px #e6e6e6;
+  }
+  .map-extent-set {
+    position: absolute;
+    font-size: 24px;
+    color: #D5B45B;
+    opacity: 0;
+    &.left {
+      left: 0;
+      opacity: 1;
+    }
+    &.right {
+      right: 0;
+      top: 0;
+      opacity: 1;
+    }
+  }
+  .map-upload-btn {
+    display: block;
+    margin: 0 auto;
+    margin-top: 55px;
+  }
+}
+.extent-form-content {
+  padding: 16px;
+}
+.extent-form-bottom {
+  text-align: right;
+  margin-right: 16px;
+}
+
+.map-box {
+  position: relative;
+  height: inherit;
+}
+#map {
+  height: inherit;
+}
+.handle {
+  position: absolute;
+  z-index: 10000;
+  top: 20px;
+  right: 20px;
+}
+.modify-cm-box {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+}
